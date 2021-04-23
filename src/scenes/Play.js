@@ -23,9 +23,13 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0, 0);
  
         // add ship (p1)
-        this.ship = new PlayerShip(this, game.config.width/2, game.config.height / 2, 'PlayerShip').setOrigin(0.5, 0);
+        this.ship = new PlayerShip(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'PlayerShip').setOrigin(0.5, 1);
     
-      // define keys
+        // add rocks
+        this.rock01 = new Rock(this, game.config.width/3, borderPadding, 'rock', 0).setOrigin(0.5, 0);
+        this.rock02 = new Rock(this, game.config.width*2/3, game.config.height/2, 'rock', 0).setOrigin(0.5, 0);
+
+        // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -36,6 +40,8 @@ class Play extends Phaser.Scene {
         this.ocean.tilePositionY -= 4;
 
         this.ship.update();
+        this.rock01.update();
+        this.rock02.update();
       }
   }
 

@@ -4,24 +4,16 @@ class PlayerShip extends Phaser.GameObjects.Sprite {
   
       // add object to existing scene
       scene.add.existing(this);
-      this.moveSpeed = 0;
+      this.moveSpeed = 2;
     }
 
     update() {
       // add or subtract speed as long as it's below a cap of +-10
-      if(keyLEFT.isDown && this.MoveSpeed > -10) {
-        this.moveSpeed -= 1;
-      } else if (keyRIGHT.isDown && this.MoveSpeed < 10) {
-        this.moveSpeed += 1;
+      if(keyLEFT.isDown && this.x >= borderUISize + this.width) {
+        this.x -= this.moveSpeed;
+      } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
+        this.x += this.moveSpeed;
       }
 
-      /* // change position if ship is not on the edge of the board
-      if(this.moveSpeed < 0 && this.x >= borderUISize + this.width) {
-        this.x += this.moveSpeed;
-      } else if(this.moveSpeed > 0 && this.x <= borderUISize + this.width) {
-        this.x += this.moveSpeed
-      }
-      */
-      this.x += this.moveSpeed;
     }
   }
