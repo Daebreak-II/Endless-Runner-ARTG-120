@@ -9,6 +9,7 @@ class Play extends Phaser.Scene {
         this.load.image('playerShip', './assets/playerShip.png');
         this.load.image('rock', './assets/Rock.png');
         this.load.image('waterbackground', './assets/waterbackground.png');
+        this.load.audio('music', './assets/Traveling Through the Endless Ocean.mp3');
     }
 
     create() {
@@ -34,14 +35,38 @@ class Play extends Phaser.Scene {
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        // play music
+        this.sound.play("music", { loop: true });
     }
 
     update() {
+        // scroll background
         this.ocean.tilePositionY -= 4;
 
         this.ship.update();
         this.rock01.update();
         this.rock02.update();
-      }
-  }
+
+        // check collisions
+        if(this.checkCollision(this.ship, this.rock01)) {
+            console.log('crash with rock01');
+        }
+        if(this.checkCollision(this.ship, this.rock02)) {
+            console.log('crash with rock02');
+        }
+
+    }
+
+    checkCollision(playerShip, rock) {
+        // simple AABB checking
+        if (rock.x < playerShip.x + playerShip.width &&  rock.x + rock.width > playerShip.x && rock.y < playerShip.y + playerShip.height && rock.height + rock.y > playerShip.y) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+}
 
