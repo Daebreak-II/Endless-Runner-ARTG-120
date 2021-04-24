@@ -1,7 +1,7 @@
 let config = {
     type: Phaser.CANVAS,
-    width: 1000,  // originally 480
-    height: 1500,  // originally 600
+    width: 800,  // originally 480
+    height: 1000,  // originally 600
     scene: [ Menu, Play ]
 }
 

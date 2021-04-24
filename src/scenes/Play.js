@@ -27,10 +27,14 @@ class Play extends Phaser.Scene {
  
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'PlayerShip').setOrigin(0.5, 1);
-    
+        this.ship.setScale(1);
+
         // add rocks
         this.rock01 = new Rock(this, game.config.width/3, borderPadding, 'rock', 0).setOrigin(0.5, 0);
         this.rock02 = new Rock(this, game.config.width*2/3, game.config.height/2, 'rock', 0).setOrigin(0.5, 0);
+        // think this fucks with the rock's hitboxes
+        this.rock01.setScale(0.5);
+        this.rock02.setScale(0.5);
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -39,7 +43,8 @@ class Play extends Phaser.Scene {
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
         // play music
-        this.sound.play("music", { loop: true });
+        this.sound.play("music", { volume: 0.5 } , { loop: true });
+        
     }
 
     update() {
