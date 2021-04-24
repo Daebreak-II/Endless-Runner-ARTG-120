@@ -6,12 +6,12 @@ class Play extends Phaser.Scene {
 
     preload() {
         // load images/tile sprites
-        this.load.image('playerShip', './assets/playerShip.png');
-        this.load.image('rock', './assets/Rock.png');
-        this.load.image('waterbackground', './assets/waterbackground.png');
-        this.load.audio('music', './assets/Traveling Through the Endless Ocean.mp3');
-        this.load.audio('shipDamage', './assets/Ship_Breaking_Down.wav');
-        this.load.audio('shipCreaking', './assets/Ship_Creaking.wav');
+        this.load.image('playerShip', './assets/sprites/playerShip.png');
+        this.load.image('rock', './assets/sprites/Rock.png');
+        this.load.image('waterbackground', './assets/sprites/waterbackground.png');
+        this.load.audio('music', './assets/sfx/Traveling Through the Endless Ocean.mp3');
+        this.load.audio('shipDamage', './assets/sfx/Ship_Breaking_Down.wav');
+        this.load.audio('shipCreaking', './assets/sfx/Ship_Creaking.wav');
     }
 
     create() {
