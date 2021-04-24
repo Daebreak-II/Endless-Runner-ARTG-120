@@ -7,6 +7,7 @@ class PlayerShip extends Phaser.GameObjects.Sprite {
       this.moveSpeed = 2; 
       this.velocity = 0;
       this.turnSpeed = 5;
+      this.scale = 0.15;
 
       // add sfx
       this.shipCreaking = scene.sound.add('shipCreaking');
@@ -33,9 +34,9 @@ class PlayerShip extends Phaser.GameObjects.Sprite {
       }
 
       // move according to velocty if not on the edges of the screen
-      if (this.velocity < 0 && this.x >= borderUISize + this.width) {
+      if (this.velocity < 0 && this.x >= borderUISize + (this.width * 0.15)) {
         this.x += this.velocity / 100;
-      } else if (this.velocity > 0 && this.x <= game.config.width - borderUISize - this.width) {
+      } else if (this.velocity > 0 && this.x <= game.config.width - borderUISize - (this.width* 0.15)) {
         this.x += this.velocity / 100;
       }
       

@@ -18,7 +18,6 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.ocean = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'waterbackground').setOrigin(0, 0);
 
-
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0x000000).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x000000).setOrigin(0, 0);
@@ -26,8 +25,8 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0, 0);
  
         // add ship (p1)
-        this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 2) - borderPadding, 'PlayerShip').setOrigin(0.5, 1);
-        this.ship.setScale(1);
+        this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 2) - borderPadding, 'playerShip', 0).setOrigin(0.5, 1);
+        this.ship.setScale(0.15);
 
         // add rocks
         this.rock01 = new Rock(this, game.config.width/3, borderPadding, 'rock', 0).setOrigin(0.5, 0);
