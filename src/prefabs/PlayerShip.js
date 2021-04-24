@@ -7,6 +7,9 @@ class PlayerShip extends Phaser.GameObjects.Sprite {
       this.moveSpeed = 2; 
       this.velocity = 0;
       this.turnSpeed = 5;
+
+      // add sfx
+      this.shipCreaking = scene.sound.add('shipCreaking');
     }
 
     update() {
@@ -22,8 +25,11 @@ class PlayerShip extends Phaser.GameObjects.Sprite {
       // change velocity based on input, capped at 5
       if(keyLEFT.isDown && this.velocity >= -500) {
         this.velocity -= this.turnSpeed;
+        // this sfx needs to be shorter
+        // this.shipCreaking.play();
       } else if (keyRIGHT.isDown && this.velocity < 500) {
         this.velocity += this.turnSpeed;
+        // this.shipCreaking.play();
       }
 
       // move according to velocty if not on the edges of the screen

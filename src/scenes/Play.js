@@ -10,6 +10,8 @@ class Play extends Phaser.Scene {
         this.load.image('rock', './assets/Rock.png');
         this.load.image('waterbackground', './assets/waterbackground.png');
         this.load.audio('music', './assets/Traveling Through the Endless Ocean.mp3');
+        this.load.audio('shipDamage', './assets/Ship_Breaking_Down.wav');
+        this.load.audio('shipCreaking', './assets/Ship_Creaking.wav');
     }
 
     create() {
@@ -51,9 +53,12 @@ class Play extends Phaser.Scene {
         // check collisions
         if(this.checkCollision(this.ship, this.rock01)) {
             console.log('crash with rock01');
+            // need to not destroy eardrums by playing this hundreds of times
+            // this.sound.play('shipDamage');
         }
         if(this.checkCollision(this.ship, this.rock02)) {
             console.log('crash with rock02');
+            // this.sound.play('shipDamage');
         }
 
     }
