@@ -56,6 +56,9 @@ class Play extends Phaser.Scene {
 
         // play music
         this.sound.play("music", { volume: 0.5, loop: true });
+
+        // logging initial mouse angle
+        oldAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
         
     }
 
@@ -63,13 +66,16 @@ class Play extends Phaser.Scene {
         // scroll background
         this.ocean.tilePositionY -= scrollSpeed + 1;
 
-        let angle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
-        this.wheel.setRotation(angle + Math.PI / 2);
-        let oldX = this.ship.x;
-        this.ship.x = game.config.width / 2 + angle / Math.PI * game.config.width / 2;
-        // let deltaX = this.ship.x - oldX;
-        // this.ship.angle = deltaX * 1.5;
-
+        let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
+        this.wheel.setRotation(newAngle + Math.PI / 2);
+        
+        if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
+            shipVelocity -= (oldAngle + newAngle) * 20;
+        } else {
+            shipVelocity -= (oldAngle - newAngle) * 20;
+        }
+        console.log(oldAngle - newAngle);
+        oldAngle = newAngle;
         
         this.rock01.update();
         this.rock02.update();

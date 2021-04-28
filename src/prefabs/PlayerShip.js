@@ -23,6 +23,7 @@ class PlayerShip extends Phaser.GameObjects.Sprite {
       }
       */
 
+      /*
       // change velocity based on input, capped at 5
       if(keyLEFT.isDown && this.velocity >= -500) {
         this.velocity -= this.turnSpeed;
@@ -32,6 +33,10 @@ class PlayerShip extends Phaser.GameObjects.Sprite {
         this.velocity += this.turnSpeed;
         // this.shipCreaking.play();
       }
+      */
+
+
+      this.velocity = shipVelocity;
 
       // move according to velocty if not on the edges of the screen
       if (this.velocity < 0 && this.x >= borderUISize + (this.width * 0.15)) {
@@ -39,7 +44,7 @@ class PlayerShip extends Phaser.GameObjects.Sprite {
       } else if (this.velocity > 0 && this.x <= game.config.width - borderUISize - (this.width* 0.15)) {
         this.x += this.velocity / 100;
       }
-      
+
       // rotate sprite according to velocity
       this.angle = this.velocity * 45 / 500;
     }

@@ -18,6 +18,9 @@ let keyF, keyR, keyLEFT, keyRIGHT;
 // variables
 let borderUISize = game.config.height / 45;
 let borderPadding = borderUISize / 9;
+
 let scrollSpeed = 4;
+let shipVelocity = 0;
+let oldAngle = 0;
 
 
