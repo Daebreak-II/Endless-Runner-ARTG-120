@@ -39,13 +39,15 @@ class Play extends Phaser.Scene {
         this.rock01.setSize(this.rock01.width * 0.5, this.rock01.height * 0.5);
         this.rock02.setSize(this.rock02.width * 0.5, this.rock02.height * 0.5);
 
+        // adding in steering wheel, as a sprite
+        this.wheel = this.add.sprite(game.config.width / 2, game.config.height - borderUISize - (borderPadding * 80) ,'steeringWheel');
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-        this.steering = this.add.sprite(384,256,'steeringWheel');
+
 
         // play music
         this.sound.play("music", { volume: 0.5, loop: true });
@@ -54,10 +56,10 @@ class Play extends Phaser.Scene {
 
     update() {
         // scroll background
-        this.ocean.tilePositionY -= 4;
+        this.ocean.tilePositionY -= scrollSpeed;
 
-        let angle = Phaser.Math.Angle.Between(this.steering.x, this.steering.y, this.input.x, this.input.y);
-        this.steering.setRotation(angle+Math.PI/2);
+        let angle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
+        this.wheel.setRotation(angle+Math.PI/2);
         let oldX = this.ship.x;
         this.ship.x = game.config.width / 2 + angle / Math.PI * game.config.width / 2;
         let deltaX = this.ship.x - oldX;
