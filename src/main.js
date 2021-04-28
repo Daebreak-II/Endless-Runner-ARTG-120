@@ -9,11 +9,16 @@ let config = {
     }
 }
 
+// creating gaem
 let game = new Phaser.Game(config);
 
+
+// reserving keys
 let keyF, keyR, keyLEFT, keyRIGHT;
 
+// variables
 let borderUISize = game.config.height / 45;
 let borderPadding = borderUISize / 9;
+let scrollSpeed = 4;
 
 
