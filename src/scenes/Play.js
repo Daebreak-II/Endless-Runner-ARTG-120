@@ -9,6 +9,7 @@ class Play extends Phaser.Scene {
         this.load.image('playerShip', './assets/sprites/playerShip.png');
         this.load.image('rock', './assets/sprites/Rock.png');
         this.load.image('waterbackground', './assets/sprites/waterbackground.png');
+        this.load.image('steeringWheel', './assets/sprites/wheel.png');
         this.load.audio('music', './assets/sfx/Traveling Through the Endless Ocean.mp3');
         this.load.audio('shipDamage', './assets/sfx/Ship_Breaking_Down.wav');
         this.load.audio('shipCreaking', './assets/sfx/Ship_Creaking.wav');
