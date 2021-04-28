@@ -29,11 +29,21 @@ class Play extends Phaser.Scene {
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 2) - borderPadding, 'playerShip', 0).setOrigin(0.5, 1);
         this.ship.setScale(0.15);
-        this.ship.setSize(this.ship.width * 0.15, this.ship.height * 0.15);
+        //this.ship.setSize(this.ship.width * 0.15, this.ship.height * 0.15);
 
         // add rocks
+<<<<<<< HEAD
         this.rock01 = new Rock(this, game.config.width/4, borderUISize + borderPadding, 'rock', 0).setOrigin(0.5, 0);
         this.rock02 = new Rock(this, game.config.width*3/4, game.config.height/2, 'rock', 0).setOrigin(0.5, 0);
+=======
+        this.rockGroup = this.physics.add.group();
+
+        this.rock01 = new Rock(this, game.config.width/3, borderPadding, 'rock', 0).setOrigin(0.5, 0.5);
+        this.rock02 = new Rock(this, game.config.width*2/3, game.config.height/2, 'rock', 0).setOrigin(0.5, 0.5);
+        
+        this.rockGroup.add(this.rock01);
+        this.rockGroup.add(this.rock02);
+>>>>>>> 2ec18d2bc43bae08e636d3af7e78602018db36a4
         // think this fucks with the rock's hitboxes
         this.rock01.setScale(0.5);
         this.rock02.setScale(0.5);
@@ -83,24 +93,10 @@ class Play extends Phaser.Scene {
         this.ship.update();
 
         // check collisions
-        if(this.checkCollision(this.ship, this.rock01)) {
-            console.log('crash with rock01');
+        if(this.physics.collide(this.ship, this.rockGroup)) {
+            console.log('crash with rock');
             // need to not destroy eardrums by playing this hundreds of times
             // this.sound.play('shipDamage');
-        }
-        if(this.checkCollision(this.ship, this.rock02)) {
-            console.log('crash with rock02');
-            // this.sound.play('shipDamage');
-        }
-
-    }
-
-    checkCollision(playerShip, rock) {
-        // simple AABB checking
-        if (rock.x < playerShip.x + playerShip.width &&  rock.x + rock.width > playerShip.x && rock.y < playerShip.y + playerShip.height && rock.height + rock.y > playerShip.y) {
-            return true;
-        } else {
-            return false;
         }
 
     }
