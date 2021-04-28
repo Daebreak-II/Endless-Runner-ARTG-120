@@ -28,7 +28,7 @@ class Play extends Phaser.Scene {
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 2) - borderPadding, 'playerShip', 0).setOrigin(0.5, 1);
         this.ship.setScale(0.15);
-        this.ship.setSize(this.ship.width * 0.15, this.ship.height * 0.15);
+        //this.ship.setSize(this.ship.width * 0.15, this.ship.height * 0.15);
 
         // add rocks
         this.rockGroup = this.physics.add.group();
