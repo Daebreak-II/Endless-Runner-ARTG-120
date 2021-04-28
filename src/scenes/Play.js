@@ -8,6 +8,7 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('playerShip', './assets/sprites/playerShip.png');
         this.load.image('rock', './assets/sprites/Rock.png');
+        this.load.image('treasure', './assets/sprites/treasure.png');
         this.load.image('waterbackground', './assets/sprites/waterbackground.png');
         this.load.image('steeringWheel', './assets/sprites/wheel.png');
         this.load.audio('music', './assets/sfx/Traveling Through the Endless Ocean.mp3');
@@ -19,7 +20,7 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.ocean = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'waterbackground').setOrigin(0, 0);
 
-        // white borders
+        // black borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0x000000).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x000000).setOrigin(0, 0);
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0x000000).setOrigin(0, 0);
@@ -31,13 +32,17 @@ class Play extends Phaser.Scene {
         this.ship.setSize(this.ship.width * 0.15, this.ship.height * 0.15);
 
         // add rocks
-        this.rock01 = new Rock(this, game.config.width/3, borderPadding, 'rock', 0).setOrigin(0.5, 0.5);
+        this.rock01 = new Rock(this, game.config.width/3, borderUISize + borderPadding, 'rock', 0).setOrigin(0.5, 0.5);
         this.rock02 = new Rock(this, game.config.width*2/3, game.config.height/2, 'rock', 0).setOrigin(0.5, 0.5);
         // think this fucks with the rock's hitboxes
         this.rock01.setScale(0.5);
         this.rock02.setScale(0.5);
         this.rock01.setSize(this.rock01.width * 0.5, this.rock01.height * 0.5);
         this.rock02.setSize(this.rock02.width * 0.5, this.rock02.height * 0.5);
+
+        // add treasure 
+        this.treasure = new Treasure(this, game.config.width * 1/4, borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0.5);
+        this.treasure.setScale(1);
 
         // adding in steering wheel, as a sprite
         this.wheel = this.add.sprite(game.config.width / 2, game.config.height - borderUISize - (borderPadding * 80) ,'steeringWheel');
@@ -56,18 +61,19 @@ class Play extends Phaser.Scene {
 
     update() {
         // scroll background
-        this.ocean.tilePositionY -= scrollSpeed;
+        this.ocean.tilePositionY -= scrollSpeed + 1;
 
         let angle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
-        this.wheel.setRotation(angle+Math.PI/2);
+        this.wheel.setRotation(angle + Math.PI / 2);
         let oldX = this.ship.x;
         this.ship.x = game.config.width / 2 + angle / Math.PI * game.config.width / 2;
         let deltaX = this.ship.x - oldX;
         this.ship.angle = deltaX * 1.5;
 
-        this.ship.update();
+        
         this.rock01.update();
         this.rock02.update();
+        this.ship.update();
 
         // check collisions
         if(this.checkCollision(this.ship, this.rock01)) {
