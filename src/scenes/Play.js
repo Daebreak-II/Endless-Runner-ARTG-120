@@ -32,8 +32,8 @@ class Play extends Phaser.Scene {
         this.ship.setSize(this.ship.width * 0.15, this.ship.height * 0.15);
 
         // add rocks
-        this.rock01 = new Rock(this, game.config.width/3, borderUISize + borderPadding, 'rock', 0).setOrigin(0.5, 0.5);
-        this.rock02 = new Rock(this, game.config.width*2/3, game.config.height/2, 'rock', 0).setOrigin(0.5, 0.5);
+        this.rock01 = new Rock(this, game.config.width/4, borderUISize + borderPadding, 'rock', 0).setOrigin(0.5, 0);
+        this.rock02 = new Rock(this, game.config.width*3/4, game.config.height/2, 'rock', 0).setOrigin(0.5, 0);
         // think this fucks with the rock's hitboxes
         this.rock01.setScale(0.5);
         this.rock02.setScale(0.5);
@@ -41,8 +41,8 @@ class Play extends Phaser.Scene {
         this.rock02.setSize(this.rock02.width * 0.5, this.rock02.height * 0.5);
 
         // add treasure 
-        this.treasure = new Treasure(this, game.config.width * 1/4, borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0.5);
-        this.treasure.setScale(1);
+        this.treasure = new Treasure(this, game.config.width / 2, borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0);
+        this.treasure.setScale(0.3);
 
         // adding in steering wheel, as a sprite
         this.wheel = this.add.sprite(game.config.width / 2, game.config.height - borderUISize - (borderPadding * 80) ,'steeringWheel');
@@ -67,12 +67,13 @@ class Play extends Phaser.Scene {
         this.wheel.setRotation(angle + Math.PI / 2);
         let oldX = this.ship.x;
         this.ship.x = game.config.width / 2 + angle / Math.PI * game.config.width / 2;
-        let deltaX = this.ship.x - oldX;
-        this.ship.angle = deltaX * 1.5;
+        // let deltaX = this.ship.x - oldX;
+        // this.ship.angle = deltaX * 1.5;
 
         
         this.rock01.update();
         this.rock02.update();
+        this.treasure.update();
         this.ship.update();
 
         // check collisions
