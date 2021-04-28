@@ -5,6 +5,7 @@ let config = {
     scene: [ Menu, Play ],
     physics: {
         default: 'arcade',
+        arcade: {debug: true},
     }
 }
 
