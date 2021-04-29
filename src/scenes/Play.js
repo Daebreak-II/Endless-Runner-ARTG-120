@@ -79,7 +79,7 @@ class Play extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 100
+            width: 100
         }
 
         //Making the score show up
@@ -87,6 +87,7 @@ class Play extends Phaser.Scene {
         this.bonusScore = 0;
         this.finalScore = 0;
         this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.scoreCounter, scoreConfig);
+        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 500, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
     }
 
     update(time, delta) {
@@ -132,6 +133,7 @@ class Play extends Phaser.Scene {
             if(!playerInvincible) {
                 playerInvincible = true;
                 playerHealth -= 1;
+                this.lifesRemaining.text = 'Health Left: ' + playerHealth;
                 this.sound.play('shipDamage', {volume: 0.5});
                 this.clock = this.time.delayedCall(2000, () => {
                     playerInvincible = false;
