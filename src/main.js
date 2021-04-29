@@ -24,4 +24,7 @@ let scrollSpeed = 4;
 let shipVelocity = 0;
 let oldAngle = 0;
 
+let playerHealth = 3;
+let playerInvincible = false;
+
 

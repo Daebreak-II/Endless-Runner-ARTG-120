@@ -40,9 +40,9 @@ class PlayerShip extends Phaser.Physics.Arcade.Sprite {
       this.velocity = shipVelocity;
 
       // move according to velocty if not on the edges of the screen
-      if (this.velocity < 0 && this.x >= borderUISize + (this.width * 0.15)) {
+      if (this.velocity < 0 && this.x >= (this.width * 0.15)) {
         this.x += this.velocity / 100;
-      } else if (this.velocity > 0 && this.x <= game.config.width - borderUISize - (this.width* 0.15)) {
+      } else if (this.velocity > 0 && this.x <= game.config.width - (this.width* 0.15)) {
         this.x += this.velocity / 100;
       }
 

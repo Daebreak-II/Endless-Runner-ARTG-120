@@ -14,18 +14,21 @@ class Play extends Phaser.Scene {
         this.load.audio('music', './assets/sfx/Traveling Through the Endless Ocean.mp3');
         this.load.audio('shipDamage', './assets/sfx/Ship_Breaking_Down.wav');
         this.load.audio('shipCreaking', './assets/sfx/Ship_Creaking.wav');
+        this.load.audio('treasurePickup', './assets/sfx/Treasure_Picked_Up.mp3');
     }
 
     create() {
         // place tile sprite
         this.ocean = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'waterbackground').setOrigin(0, 0);
 
+        /*
         // black borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0x000000).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x000000).setOrigin(0, 0);
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0x000000).setOrigin(0, 0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0, 0);
- 
+        */
+
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 2) - borderPadding, 'playerShip', 0).setOrigin(0.5, 1);
         this.ship.setScale(0.15);
@@ -102,6 +105,7 @@ class Play extends Phaser.Scene {
 
         if (game.input.activePointer.leftButtonDown()) {
             this.wheel.setRotation(newAngle + Math.PI / 2);
+            // change velocity based off change in mouse angle, special case for going from 180 to -180 and vice versa
             if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
                 shipVelocity -= (oldAngle + newAngle) * 20;
             } else {
@@ -125,14 +129,23 @@ class Play extends Phaser.Scene {
 
         // check collisions
         if(this.physics.collide(this.ship, this.rockGroup)) {
-            console.log('crash with rock');
-            // need to not destroy eardrums by playing this hundreds of times
-            // this.sound.play('shipDamage');
+            if(!playerInvincible) {
+                playerInvincible = true;
+                playerHealth -= 1;
+                this.sound.play('shipDamage', {volume: 0.5});
+                this.clock = this.time.delayedCall(2000, () => {
+                    playerInvincible = false;
+                }, null, this);
+            }
         }
         if(this.physics.collide(this.ship, this.treasure)) {
-            console.log('picked up treasure');
+            this.treasure.y = 0 - this.treasure.height - game.config.height;
+            this.treasure.x = Phaser.Math.Between(borderUISize + borderPadding + this.treasure.width, game.config.width - borderUISize - borderPadding - this.treasure.width);
             this.bonusScore += 10;
-            this.treasure.destroy();
+            this.sound.play('treasurePickup', {volume: 1});
+            this.clock = this.time.delayedCall(10000, () => {
+
+            }, null, this);
         }
 
     }
