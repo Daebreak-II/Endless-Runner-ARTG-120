@@ -65,18 +65,38 @@ class Play extends Phaser.Scene {
 
         // logging initial mouse angle
         oldAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
-        
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+        this.scoreCounter = 0;
+        this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.scoreCounter, scoreConfig);
     }
 
-    update() {
+    update(time, delta) {
         // scroll background
         this.ocean.tilePositionY -= scrollSpeed + 1;
 
+        // adding to the score
+        this.scoreCounter = time;
+        this.scoreCounter = Math.floor(time / 1000);
+        this.scoreText.text = this.scoreCounter;
+
+
         // math for linking wheel turning to ship velocity
         let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
-        this.wheel.setRotation(newAngle + Math.PI / 2);
+        
 
         if (game.input.activePointer.leftButtonDown()) {
+            this.wheel.setRotation(newAngle + Math.PI / 2);
             if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
                 shipVelocity -= (oldAngle + newAngle) * 20;
             } else {
