@@ -64,7 +64,8 @@ class Play extends Phaser.Scene {
 
 
         // play music
-        this.sound.play("music", { volume: 0.5, loop: true });
+        this.musicPlaying = this.sound.add("music", { volume: 0.5, loop: true });
+        this.musicPlaying.play();
 
         // logging initial mouse angle
         oldAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
@@ -81,12 +82,15 @@ class Play extends Phaser.Scene {
             },
             width: 100
         }
+        //making a game over check
+        this.gameOver = false;
 
         //Making the score show up
         this.scoreCounter = 0;
         this.bonusScore = 0;
         this.finalScore = 0;
         this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.scoreCounter, scoreConfig);
+        //Showing how many hits are left
         this.lifesRemaining = this.add.text(borderUISize + borderPadding + 500, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
     }
 
@@ -94,9 +98,25 @@ class Play extends Phaser.Scene {
         // scroll background
         this.ocean.tilePositionY -= scrollSpeed + 1;
 
-        // adding to the score
-        //this.scoreCounter = time;
-        this.scoreCounter = Math.floor(time / 1000) + this.bonusScore;
+
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.scene.restart();
+            playerHealth = 3;
+            playerInvincible = false;
+            
+        }
+
+        if(this.gameOver){
+            this.musicPlaying.stop();
+        }
+
+        if(!this.gameOver){
+            this.checkForGameOver();
+        }
+
+        // adding to the 
+        this.finalScore += delta;
+        this.scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
         this.scoreText.text = this.scoreCounter;
 
 
@@ -150,6 +170,30 @@ class Play extends Phaser.Scene {
             }, null, this);
         }
 
+    }
+    checkForGameOver(){
+
+        if(playerHealth <= 0){
+            //this.ship.destroy();
+            
+            //this.scene.pause();
+            let scoreConfig = {
+                fontFamily: 'Courier',
+                fontSize: '28px',
+                backgroundColor: '#F3B141',
+                color: '#843605',
+                align: 'center',
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                },
+                Width: 100
+            }
+            // This should be changed to look more like the game should look like
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
+            this.gameOver = true;
+        }
     }
 
 }
