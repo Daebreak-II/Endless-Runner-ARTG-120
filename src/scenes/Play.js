@@ -107,48 +107,49 @@ class Play extends Phaser.Scene {
 
         if(this.gameOver){
             this.musicPlaying.stop();
+            this.ocean.tilePositionY = 0;
         }
 
         if(!this.gameOver){
             this.checkForGameOver();
         
-
-        // adding to the 
+            // adding to the 
             this.finalScore += delta;
             this.scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
             this.scoreText.text = this.scoreCounter;
-        }
-
-        // math for linking wheel turning to ship velocity
-        let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
         
 
-        if (game.input.activePointer.leftButtonDown()) {
-            this.wheel.setRotation(newAngle + Math.PI / 2);
-            // change velocity based off change in mouse angle, special case for going from 180 to -180 and vice versa
-            if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
-                shipVelocity -= (oldAngle + newAngle) * 20;
-            } else {
-                shipVelocity -= (oldAngle - newAngle) * 20;
+            // math for linking wheel turning to ship velocity
+            let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
+        
+
+            if (game.input.activePointer.leftButtonDown()) {
+                this.wheel.setRotation(newAngle + Math.PI / 2);
+                // change velocity based off change in mouse angle, special case for going from 180 to -180 and vice versa
+                if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
+                    shipVelocity -= (oldAngle + newAngle) * 20;
+                } else {
+                    shipVelocity -= (oldAngle - newAngle) * 20;
+                }
             }
-        }
 
 
-        // limiters on ship's velocity
-        if (shipVelocity >= 500) {
-            shipVelocity = 500;
-        } else if (shipVelocity <= -500) {
-            shipVelocity = -500;
-        }
-        oldAngle = newAngle;
+            // limiters on ship's velocity
+            if (shipVelocity >= 500) {
+                shipVelocity = 500;
+            } else if (shipVelocity <= -500) {
+                shipVelocity = -500;
+            }
+            oldAngle = newAngle;
         
-        this.rock01.update();
-        this.rock02.update();
-        this.treasure.update();
-        this.ship.update();
+            this.rock01.update();
+            this.rock02.update();
+            this.treasure.update();
+            this.ship.update();
 
-        // speed up game based on time
-        scrollSpeed = 4 + (this.finalScore / 30000);
+            // speed up game based on time
+            scrollSpeed = 4 + (this.finalScore / 30000);
+        }
 
         // check collisions
         // hitting rock
