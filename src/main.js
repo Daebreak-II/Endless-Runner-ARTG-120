@@ -27,4 +27,6 @@ let oldAngle = 0;
 let playerHealth = 3;
 let playerInvincible = false;
 
+let waveSfx = false;
+
 
