@@ -6,15 +6,15 @@ class Play extends Phaser.Scene {
 
     preload() {
         // load images/tile sprites
-        this.load.image('playerShip', './assets/sprites/playerShip.png');
-        this.load.image('rock', './assets/sprites/rock.png');
-        this.load.image('treasure', './assets/sprites/treasure.png');
-        this.load.image('waterbackground', './assets/sprites/waterbackground.png');
-        this.load.image('steeringWheel', './assets/sprites/wheel.png');
-        this.load.audio('music', './assets/sfx/Traveling Through the Endless Ocean.mp3');
-        this.load.audio('shipDamage', './assets/sfx/Ship_Breaking_Down.wav');
-        this.load.audio('shipCreaking', './assets/sfx/Ship_Creaking.wav');
-        this.load.audio('treasurePickup', './assets/sfx/Treasure_Picked_Up.mp3');
+        this.load.image('playerShip', './Assets/sprites/playerShip.png');
+        this.load.image('rock', './Assets/sprites/rock.png');
+        this.load.image('treasure', './Assets/sprites/treasure.png');
+        this.load.image('waterbackground', './Assets/sprites/waterbackground.png');
+        this.load.image('steeringWheel', './Assets/sprites/wheel.png');
+        this.load.audio('music', './Assets/sfx/Traveling Through the Endless Ocean.mp3');
+        this.load.audio('shipDamage', './Assets/sfx/Ship_Breaking_Down.wav');
+        this.load.audio('shipCreaking', './Assets/sfx/Ship_Creaking.wav');
+        this.load.audio('treasurePickup', './Assets/sfx/Treasure_Picked_Up.mp3');
     }
 
     create() {
