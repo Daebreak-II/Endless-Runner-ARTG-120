@@ -148,7 +148,7 @@ class Play extends Phaser.Scene {
         this.ship.update();
 
         // speed up game based on time
-        scrollSpeed = 4 + (time / 30000);
+        scrollSpeed = 4 + (this.finalScore / 30000);
 
         // check collisions
         // hitting rock
@@ -181,7 +181,7 @@ class Play extends Phaser.Scene {
     checkForGameOver(){
 
         if(playerHealth <= 0){
-            //this.ship.destroy();
+            this.ship.destroy();
             
             //this.scene.pause();
             let scoreConfig = {
