@@ -65,6 +65,7 @@ class Play extends Phaser.Scene {
 
         // logging initial mouse angle
         oldAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
+        // font for the text (not final)
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -77,7 +78,11 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 100
         }
+
+        //Making the score show up
         this.scoreCounter = 0;
+        this.bonusScore = 0;
+        this.finalScore = 0;
         this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.scoreCounter, scoreConfig);
     }
 
@@ -86,8 +91,8 @@ class Play extends Phaser.Scene {
         this.ocean.tilePositionY -= scrollSpeed + 1;
 
         // adding to the score
-        this.scoreCounter = time;
-        this.scoreCounter = Math.floor(time / 1000);
+        //this.scoreCounter = time;
+        this.scoreCounter = Math.floor(time / 1000) + this.bonusScore;
         this.scoreText.text = this.scoreCounter;
 
 
@@ -126,6 +131,8 @@ class Play extends Phaser.Scene {
         }
         if(this.physics.collide(this.ship, this.treasure)) {
             console.log('picked up treasure');
+            this.bonusScore += 10;
+            this.treasure.destroy();
         }
 
     }
