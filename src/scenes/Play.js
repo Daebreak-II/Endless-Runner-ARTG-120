@@ -29,7 +29,7 @@ class Play extends Phaser.Scene {
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 2) - borderPadding, 'playerShip', 0).setOrigin(0.5, 1);
         this.ship.setScale(0.15);
-        //this.ship.setSize(this.ship.width * 0.15, this.ship.height * 0.15);
+        this.ship.setSize(this.ship.width * 1, this.ship.height * 1);
 
         // add rocks
         this.rockGroup = this.physics.add.group();
@@ -48,6 +48,7 @@ class Play extends Phaser.Scene {
         // add treasure 
         this.treasure = new Treasure(this, game.config.width / 2, borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0);
         this.treasure.setScale(0.3);
+        this.treasure.setSize(this.treasure.width, this.treasure.height);
 
         // adding in steering wheel, as a sprite
         this.wheel = this.add.sprite(game.config.width / 2, game.config.height - borderUISize - (borderPadding * 80) ,'steeringWheel');
@@ -71,13 +72,24 @@ class Play extends Phaser.Scene {
         // scroll background
         this.ocean.tilePositionY -= scrollSpeed + 1;
 
+        // math for linking wheel turning to ship velocity
         let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
         this.wheel.setRotation(newAngle + Math.PI / 2);
-        
-        if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
-            shipVelocity -= (oldAngle + newAngle) * 20;
-        } else {
-            shipVelocity -= (oldAngle - newAngle) * 20;
+
+        if (game.input.activePointer.leftButtonDown()) {
+            if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
+                shipVelocity -= (oldAngle + newAngle) * 20;
+            } else {
+                shipVelocity -= (oldAngle - newAngle) * 20;
+            }
+        }
+
+
+        // limiters on ship's velocity
+        if (shipVelocity >= 500) {
+            shipVelocity = 500;
+        } else if (shipVelocity <= -500) {
+            shipVelocity = -500;
         }
         oldAngle = newAngle;
         
@@ -91,6 +103,9 @@ class Play extends Phaser.Scene {
             console.log('crash with rock');
             // need to not destroy eardrums by playing this hundreds of times
             // this.sound.play('shipDamage');
+        }
+        if(this.physics.collide(this.ship, this.treasure)) {
+            console.log('picked up treasure');
         }
 
     }
