@@ -111,13 +111,13 @@ class Play extends Phaser.Scene {
 
         if(!this.gameOver){
             this.checkForGameOver();
-        }
+        
 
         // adding to the 
-        this.finalScore += delta;
-        this.scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
-        this.scoreText.text = this.scoreCounter;
-
+            this.finalScore += delta;
+            this.scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
+            this.scoreText.text = this.scoreCounter;
+        }
 
         // math for linking wheel turning to ship velocity
         let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
@@ -183,7 +183,7 @@ class Play extends Phaser.Scene {
         if(playerHealth <= 0){
             this.ship.destroy();
             
-            //this.scene.pause();
+            
             let scoreConfig = {
                 fontFamily: 'Courier',
                 fontSize: '28px',
