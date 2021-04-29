@@ -129,17 +129,22 @@ class Play extends Phaser.Scene {
         this.ship.update();
 
         // check collisions
+        // hitting rock
         if(this.physics.collide(this.ship, this.rockGroup)) {
             if(!playerInvincible) {
                 playerInvincible = true;
                 playerHealth -= 1;
+                this.ship.setAlpha(0.7);
                 this.lifesRemaining.text = 'Health Left: ' + playerHealth;
                 this.sound.play('shipDamage', {volume: 0.5});
                 this.clock = this.time.delayedCall(2000, () => {
+                    this.ship.setAlpha(1);
                     playerInvincible = false;
                 }, null, this);
             }
         }
+
+        // pickup treasure
         if(this.physics.collide(this.ship, this.treasure)) {
             this.treasure.y = 0 - this.treasure.height - game.config.height;
             this.treasure.x = Phaser.Math.Between(borderUISize + borderPadding + this.treasure.width, game.config.width - borderUISize - borderPadding - this.treasure.width);

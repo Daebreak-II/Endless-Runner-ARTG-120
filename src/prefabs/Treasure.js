@@ -17,6 +17,6 @@ class Treasure extends Phaser.Physics.Arcade.Sprite {
             this.y = 0 - this.height - game.config.height;
             this.x = Phaser.Math.Between(borderUISize + borderPadding + this.width, game.config.width - borderUISize - borderPadding - this.width);
         }
-
     }
+    
 }
