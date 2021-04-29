@@ -90,8 +90,7 @@ class Play extends Phaser.Scene {
         this.bonusScore = 0;
         this.finalScore = 0;
         this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.scoreCounter, scoreConfig);
-        //Showing how many hits are left
-        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 500, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
+        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 510, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
     }
 
     update(time, delta) {
@@ -148,18 +147,26 @@ class Play extends Phaser.Scene {
         this.treasure.update();
         this.ship.update();
 
+        // speed up game based on time
+        scrollSpeed = 4 + (time / 30000);
+
         // check collisions
+        // hitting rock
         if(this.physics.collide(this.ship, this.rockGroup)) {
             if(!playerInvincible) {
                 playerInvincible = true;
                 playerHealth -= 1;
+                this.ship.setAlpha(0.7);
                 this.lifesRemaining.text = 'Health Left: ' + playerHealth;
                 this.sound.play('shipDamage', {volume: 0.5});
                 this.clock = this.time.delayedCall(2000, () => {
+                    this.ship.setAlpha(1);
                     playerInvincible = false;
                 }, null, this);
             }
         }
+
+        // pickup treasure
         if(this.physics.collide(this.ship, this.treasure)) {
             this.treasure.y = 0 - this.treasure.height - game.config.height;
             this.treasure.x = Phaser.Math.Between(borderUISize + borderPadding + this.treasure.width, game.config.width - borderUISize - borderPadding - this.treasure.width);

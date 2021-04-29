@@ -10,6 +10,7 @@ class Treasure extends Phaser.Physics.Arcade.Sprite {
 
 
     update() {
+        this.moveSpeed = scrollSpeed;
         // move treasure down
         this.y += this.moveSpeed - 1;
         // return to top when out of screen

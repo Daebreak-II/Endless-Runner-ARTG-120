@@ -9,6 +9,7 @@ class Rock extends Phaser.Physics.Arcade.Sprite {
 
 
     update() {
+        this.moveSpeed = scrollSpeed;
         // move rock down
         this.y += this.moveSpeed;
         // return to top when out of screen
