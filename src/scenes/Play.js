@@ -183,7 +183,7 @@ class Play extends Phaser.Scene {
         }
 
         // play a random wave sfx every 10 seconds
-        if(!waveSfx) {
+        if(!waveSfx && !this.gameOver) {
             waveSfx = true;
             let sfx = Phaser.Math.Between(1, 3);
             if(sfx <= 1) {
