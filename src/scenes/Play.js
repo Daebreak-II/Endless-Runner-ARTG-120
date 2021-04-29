@@ -15,6 +15,10 @@ class Play extends Phaser.Scene {
         this.load.audio('shipDamage', './assets/sfx/Ship_Breaking_Down.wav');
         this.load.audio('shipCreaking', './assets/sfx/Ship_Creaking.wav');
         this.load.audio('treasurePickup', './assets/sfx/Treasure_Picked_Up.mp3');
+        this.load.audio('gameOver', './assets/sfx/Game_Over.mp3');
+        this.load.audio('wave1', './assets/sfx/Wave_Crashing_1.wav');
+        this.load.audio('wave2', './assets/sfx/Wave_Crashing_2.wav');
+        this.load.audio('wave3', './assets/sfx/Wave_Crashing_3.wav');
     }
 
     create() {
@@ -178,6 +182,18 @@ class Play extends Phaser.Scene {
             }, null, this);
         }
 
+        // play a random wave sfx every 10 seconds, based off of score counter
+        if(this.scoreCounter % 10 == 0) {
+            let sfx = Phaser.Math.Between(1,3);
+            if(sfx <= 1) {
+                this.sound.play('wave1', {volume: 1});
+            } else if( sfx <= 2) {
+                this.sound.play('wave2', {volume: 1});
+            } else {
+                this.sound.play('wave3', {volume: 1});
+            }
+        }
+
     }
     checkForGameOver(){
 
@@ -201,6 +217,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
+            this.sound.play('gameOver', { volume: 1 });
         }
     }
 
