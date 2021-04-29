@@ -87,7 +87,7 @@ class Play extends Phaser.Scene {
         this.bonusScore = 0;
         this.finalScore = 0;
         this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.scoreCounter, scoreConfig);
-        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 500, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
+        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 510, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
     }
 
     update(time, delta) {
@@ -127,6 +127,9 @@ class Play extends Phaser.Scene {
         this.rock02.update();
         this.treasure.update();
         this.ship.update();
+
+        // speed up game based on time
+        scrollSpeed = 4 + (time / 30000);
 
         // check collisions
         // hitting rock
