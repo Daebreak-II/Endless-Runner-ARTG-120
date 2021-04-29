@@ -16,6 +16,7 @@ class Play extends Phaser.Scene {
         this.load.audio('shipCreaking', './Assets/sfx/Ship_Creaking.wav');
         this.load.audio('treasurePickup', './Assets/sfx/Treasure_Picked_Up.mp3');
         this.load.audio('gameOver', './Assets/sfx/Game_Over.mp3');
+        this.load.audio('shipCreak', './Assets/sfx/Ship_Creaking.wav');
         this.load.audio('wave1', './Assets/sfx/Wave_Crashing_1.wav');
         this.load.audio('wave2', './Assets/sfx/Wave_Crashing_2.wav');
         this.load.audio('wave3', './Assets/sfx/Wave_Crashing_3.wav');
@@ -185,13 +186,15 @@ class Play extends Phaser.Scene {
         // play a random wave sfx every 10 seconds
         if(!waveSfx && !this.gameOver) {
             waveSfx = true;
-            let sfx = Phaser.Math.Between(1, 3);
+            let sfx = Phaser.Math.Between(1, 4);
             if(sfx <= 1) {
                 this.sound.play('wave1', {volume: 0.5});
             } else if(sfx <= 2) {
                 this.sound.play('wave2', {volume: 0.5});
-            } else {
+            } else if (sfx <= 3) {
                 this.sound.play('wave3', {volume: 0.5});
+            } else {
+                this.sound.play('shipCreak', {volume: 0.5})
             }
             this.clock = this.time.delayedCall(10000, () => {
                 waveSfx = false;
