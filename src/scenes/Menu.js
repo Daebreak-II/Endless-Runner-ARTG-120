@@ -39,7 +39,7 @@ class Menu extends Phaser.Scene {
     update(){
       
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOver){
-        console.log('Is mouse working?');
+        //console.log('Is mouse working?');
         this.scene.start("playScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
