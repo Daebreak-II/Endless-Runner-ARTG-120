@@ -16,17 +16,20 @@ let game = new Phaser.Game(config);
 // reserving keys
 let keyF, keyR, keyLEFT, keyRIGHT;
 
-// variables
+// game dimension variables
 let borderUISize = game.config.height / 45;
 let borderPadding = borderUISize / 9;
 
+// gameplay variables
 let scrollSpeed = 4;
+let spriteScale = 1;
 let shipVelocity = 0;
-let oldAngle = 0;
+let oldAngle = 0
 
 let playerHealth = 3;
 let playerInvincible = false;
 
+// volume variables
+let volumeMultiplier = 0.25;
 let waveSfx = false;
-
 
