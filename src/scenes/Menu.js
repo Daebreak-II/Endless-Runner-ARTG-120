@@ -32,17 +32,16 @@ class Menu extends Phaser.Scene {
         //setting up mouse cursor over object
         this.mousePlay.on('pointerover', () => { 
           this.mousePointerisOver = true;
-          this.sound.play('menuChoice'); 
+          this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
         
     }
     update(){
       
-
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOver){
-        //console.log('Is mouse workign?');
+        console.log('Is mouse working?');
         this.scene.start("playScene");
-        this.sound.play('selected');
+        this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
       
                       
