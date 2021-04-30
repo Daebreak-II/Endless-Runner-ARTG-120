@@ -35,9 +35,9 @@ class Play extends Phaser.Scene {
         */
 
         // add ship (p1)
-        this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 2) - borderPadding, 'playerShip', 0).setOrigin(0.5, 1);
+        this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 4) - borderPadding, 'playerShip', 0).setOrigin(0.5, 0.5);
         this.ship.setScale(0.15);
-        this.ship.setSize(this.ship.width * 1, this.ship.height * 1);
+        this.ship.setSize(this.ship.width * 2/3, this.ship.height * 2/3);
 
         // add rocks
         this.rockGroup = this.physics.add.group();
@@ -50,13 +50,13 @@ class Play extends Phaser.Scene {
         // think this fucks with the rock's hitboxes
         this.rock01.setScale(0.5);
         this.rock02.setScale(0.5);
-        this.rock01.setSize(this.rock01.width * 0.5, this.rock01.height * 0.5);
-        this.rock02.setSize(this.rock02.width * 0.5, this.rock02.height * 0.5);
+        this.rock01.setSize(this.rock01.width * 2/3, this.rock01.height * 1/2);
+        this.rock02.setSize(this.rock02.width * 2/3, this.rock02.height * 1/2);
 
         // add treasure 
         this.treasure = new Treasure(this, game.config.width / 2, 0 - game.config.height + borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0);
         this.treasure.setScale(0.3);
-        this.treasure.setSize(this.treasure.width, this.treasure.height);
+        this.treasure.setSize(this.treasure.width * 3/4, this.treasure.height * 3/4);
 
         // adding in steering wheel, as a sprite
         this.wheel = this.add.sprite(game.config.width / 2, game.config.height - borderUISize - (borderPadding * 80) ,'steeringWheel');
