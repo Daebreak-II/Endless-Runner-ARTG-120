@@ -9,9 +9,6 @@ class PlayerShip extends Phaser.Physics.Arcade.Sprite {
       this.velocity = 0;
       this.turnSpeed = 5;
       this.scale = 0.15;
-
-      // add sfx
-      this.shipCreaking = scene.sound.add('shipCreaking');
     }
 
     update() {
@@ -24,17 +21,17 @@ class PlayerShip extends Phaser.Physics.Arcade.Sprite {
       }
       */
 
-      /*
-      // change velocity based on input, capped at 5
+      
+      // key-based movement
       if(keyLEFT.isDown && this.velocity >= -500) {
-        this.velocity -= this.turnSpeed;
+        shipVelocity -= this.turnSpeed;
         // this sfx needs to be shorter
         // this.shipCreaking.play();
       } else if (keyRIGHT.isDown && this.velocity < 500) {
-        this.velocity += this.turnSpeed;
+        shipVelocity += this.turnSpeed;
         // this.shipCreaking.play();
       }
-      */
+      
 
 
       this.velocity = shipVelocity;

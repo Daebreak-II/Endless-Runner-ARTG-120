@@ -36,30 +36,35 @@ class Play extends Phaser.Scene {
 
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 4) - borderPadding, 'playerShip', 0).setOrigin(0.5, 0.5);
-        this.ship.setScale(0.15);
+        this.ship.setScale(0.15 * spriteScale);
         this.ship.setSize(this.ship.width * 2/3, this.ship.height * 2/3);
 
         // add rocks
         this.rockGroup = this.physics.add.group();
 
-        this.rock01 = new Rock(this, game.config.width/3, 0 - game.config.height/ 3, 'rock', 0).setOrigin(0.5, 0);
-        this.rock02 = new Rock(this, game.config.width*2/3, 0 - game.config.height * 3/4, 'rock', 0).setOrigin(0.5, 0);
+        this.rock01 = new Rock(this, game.config.width * 1/4, 0 - game.config.height * 1/3, 'rock', 0).setOrigin(0.5, 0);
+        this.rock02 = new Rock(this, game.config.width * 3/4, 0 - game.config.height * 1, 'rock', 0).setOrigin(0.5, 0);
+        this.rock03 = new Rock(this, game.config.width * 1/4, 0 - game.config.height * 5/3, 'rock', 0).setOrigin(0.5, 0);
         
         this.rockGroup.add(this.rock01);
         this.rockGroup.add(this.rock02);
-        // think this fucks with the rock's hitboxes
-        this.rock01.setScale(0.5);
-        this.rock02.setScale(0.5);
+        this.rockGroup.add(this.rock03);
+        this.rock01.setScale(0.5 * spriteScale);
+        this.rock02.setScale(0.5 * spriteScale);
+        this.rock03.setScale(0.5 * spriteScale);
         this.rock01.setSize(this.rock01.width * 2/3, this.rock01.height * 1/2);
         this.rock02.setSize(this.rock02.width * 2/3, this.rock02.height * 1/2);
-
+        this.rock03.setSize(this.rock02.width * 2/3, this.rock02.height * 1/2);
+        
         // add treasure 
         this.treasure = new Treasure(this, game.config.width / 2, 0 - game.config.height + borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0);
-        this.treasure.setScale(0.3);
+        this.treasure.setScale(0.3 * spriteScale);
         this.treasure.setSize(this.treasure.width * 3/4, this.treasure.height * 3/4);
 
         // adding in steering wheel, as a sprite
-        this.wheel = this.add.sprite(game.config.width / 2, game.config.height - borderUISize - (borderPadding * 80) ,'steeringWheel');
+        this.wheel = this.add.sprite(game.config.width / 2, game.config.height / 2 ,'steeringWheel');
+        this.wheel.setScale(1);
+        this.wheel
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -69,7 +74,7 @@ class Play extends Phaser.Scene {
 
 
         // play music
-        this.musicPlaying = this.sound.add("music", { volume: 0.5, loop: true });
+        this.musicPlaying = this.sound.add("music", { volume: 0.5 * volumeMultiplier, loop: true });
         this.musicPlaying.play();
 
         // logging initial mouse angle
@@ -118,10 +123,10 @@ class Play extends Phaser.Scene {
         if(!this.gameOver){
             this.checkForGameOver();
         
-            // adding to the 
+            // adding to the score
             this.finalScore += delta;
             this.scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
-            this.scoreText.text = this.scoreCounter;
+            this.scoreText.text = 'Booty Plundered: ' + this.scoreCounter;
         
 
             // math for linking wheel turning to ship velocity
@@ -147,13 +152,14 @@ class Play extends Phaser.Scene {
             }
             oldAngle = newAngle;
         
+            this.treasure.update();
             this.rock01.update();
             this.rock02.update();
-            this.treasure.update();
+            this.rock03.update();
             this.ship.update();
 
             // speed up game based on time
-            scrollSpeed = 4 + (this.finalScore / 25000);
+            scrollSpeed = 4 + (this.finalScore / 30000);
         }
 
         // check collisions
@@ -165,7 +171,7 @@ class Play extends Phaser.Scene {
                 this.cameras.main.shake(200, 0.01);
                 this.ship.setAlpha(0.7);
                 this.lifesRemaining.text = 'Health Left: ' + playerHealth;
-                this.sound.play('shipDamage', {volume: 0.5});
+                this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
                 this.clock = this.time.delayedCall(2000, () => {
                     this.ship.setAlpha(1);
                     playerInvincible = false;
@@ -178,10 +184,21 @@ class Play extends Phaser.Scene {
             this.treasure.y = 0 - this.treasure.height - game.config.height;
             this.treasure.x = Phaser.Math.Between(borderUISize + borderPadding + this.treasure.width, game.config.width - borderUISize - borderPadding - this.treasure.width);
             this.bonusScore += 10;
-            this.sound.play('treasurePickup', {volume: 1});
+            this.sound.play('treasurePickup', {volume: 1 * volumeMultiplier});
             this.clock = this.time.delayedCall(10000, () => {
 
             }, null, this);
+        }
+
+        // respawn rocks so they don't overlap
+        if(this.physics.collide(this.rock01, this.rock02)) {
+            this.rock01.respawn();
+        }
+        if(this.physics.collide(this.rock01, this.rock03)) {
+            this.rock01.respawn();
+        }
+        if(this.physics.collide(this.rock02, this.rock03)) {
+            this.rock02.respawn();
         }
 
         // play a random wave sfx every 10 seconds
@@ -189,13 +206,13 @@ class Play extends Phaser.Scene {
             waveSfx = true;
             let sfx = Phaser.Math.Between(1, 4);
             if(sfx <= 1) {
-                this.sound.play('wave1', {volume: 0.5});
+                this.sound.play('wave1', {volume: 0.5 * volumeMultiplier});
             } else if(sfx <= 2) {
-                this.sound.play('wave2', {volume: 0.5});
+                this.sound.play('wave2', {volume: 0.5 * volumeMultiplier});
             } else if (sfx <= 3) {
-                this.sound.play('wave3', {volume: 0.5});
+                this.sound.play('wave3', {volume: 0.5 * volumeMultiplier});
             } else {
-                this.sound.play('shipCreak', {volume: 0.5})
+                this.sound.play('shipCreak', {volume: 0.5 * volumeMultiplier})
             }
             this.clock = this.time.delayedCall(10000, () => {
                 waveSfx = false;
@@ -225,7 +242,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
-            this.sound.play('gameOver', { volume: 1 });
+            this.sound.play('gameOver', { volume: 1 * volumeMultiplier });
         }
     }
 
