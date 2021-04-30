@@ -22,22 +22,14 @@ class Menu extends Phaser.Scene {
         this.selectPlay = this.add.sprite(250, game.config.height/2 - 4, 'play').setOrigin(0, 0);
         this.selectPlay.setScale(0.5);
 
-        //this.selectPlayPosition = new Vector2([250], [game.config.height/2 - 4]);
         this.mousePlay = this.selectPlay.setInteractive();
 
 
         this.selectQuit = this.add.image(250, game.config.height/2 + 150, 'quit').setOrigin(0, 0);
         this.selectQuit.setScale(0.5);
         this.mousePointerisOver = false;
-        //this.mousePlay = this.selectPlay.setInteractive();
-
-        //this.mousePlay.on('pointerover',function(pointer, x, y, event){
-          //console.log('mouse on over object');
-        //  this.mousePointerisOver = true;
-        //  console.log(this.mousePointerisOver);
-            
-        //})
   
+        //setting up mouse cursor over object
         this.mousePlay.on('pointerover', () => { 
           this.mousePointerisOver = true;
           this.sound.play('menuChoice'); 
@@ -48,15 +40,12 @@ class Menu extends Phaser.Scene {
       
 
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOver){
-        console.log('Is mouse workign?');
+        //console.log('Is mouse workign?');
         this.scene.start("playScene");
         this.sound.play('selected');
       }
       
                       
     }
-    //  if((this.input.Pointer.position == this.selectPlayPosition) && game.input.activePointer.leftButtonDown){
-    //    this.scene.start("playScene");
-    //  }
-    }
+}
   
