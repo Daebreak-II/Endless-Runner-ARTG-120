@@ -94,7 +94,7 @@ class Play extends Phaser.Scene {
         this.scoreCounter = 0;
         this.bonusScore = 0;
         this.finalScore = 0;
-        this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.scoreCounter, scoreConfig);
+        this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'Booty Plundered ' + this.scoreCounter, scoreConfig);
         this.lifesRemaining = this.add.text(borderUISize + borderPadding + 510, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
     }
 
@@ -153,7 +153,7 @@ class Play extends Phaser.Scene {
             this.ship.update();
 
             // speed up game based on time
-            scrollSpeed = 4 + (this.finalScore / 20000);
+            scrollSpeed = 4 + (this.finalScore / 25000);
         }
 
         // check collisions
@@ -162,6 +162,7 @@ class Play extends Phaser.Scene {
             if(!playerInvincible) {
                 playerInvincible = true;
                 playerHealth -= 1;
+                this.cameras.main.shake(200, 0.01);
                 this.ship.setAlpha(0.7);
                 this.lifesRemaining.text = 'Health Left: ' + playerHealth;
                 this.sound.play('shipDamage', {volume: 0.5});
