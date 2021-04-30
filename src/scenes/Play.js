@@ -42,8 +42,8 @@ class Play extends Phaser.Scene {
         // add rocks
         this.rockGroup = this.physics.add.group();
 
-        this.rock01 = new Rock(this, game.config.width/3, borderPadding, 'rock', 0).setOrigin(0.5, 0);
-        this.rock02 = new Rock(this, game.config.width*2/3, game.config.height/2, 'rock', 0).setOrigin(0.5, 0);
+        this.rock01 = new Rock(this, game.config.width/3, 0 - game.config.height/ 3, 'rock', 0).setOrigin(0.5, 0);
+        this.rock02 = new Rock(this, game.config.width*2/3, 0 - game.config.height * 3/4, 'rock', 0).setOrigin(0.5, 0);
         
         this.rockGroup.add(this.rock01);
         this.rockGroup.add(this.rock02);
@@ -54,7 +54,7 @@ class Play extends Phaser.Scene {
         this.rock02.setSize(this.rock02.width * 0.5, this.rock02.height * 0.5);
 
         // add treasure 
-        this.treasure = new Treasure(this, game.config.width / 2, borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0);
+        this.treasure = new Treasure(this, game.config.width / 2, 0 - game.config.height + borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0);
         this.treasure.setScale(0.3);
         this.treasure.setSize(this.treasure.width, this.treasure.height);
 
@@ -107,7 +107,7 @@ class Play extends Phaser.Scene {
             this.scene.restart();
             playerHealth = 3;
             playerInvincible = false;
-            
+            shipVelocity = 0;
         }
 
         if(this.gameOver){
@@ -153,7 +153,7 @@ class Play extends Phaser.Scene {
             this.ship.update();
 
             // speed up game based on time
-            scrollSpeed = 4 + (this.finalScore / 30000);
+            scrollSpeed = 4 + (this.finalScore / 20000);
         }
 
         // check collisions
