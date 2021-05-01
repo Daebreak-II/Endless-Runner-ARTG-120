@@ -39,10 +39,18 @@ class Menu extends Phaser.Scene {
           this.mousePointerisOverPlay = true;
           this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
+        
+        this.mousePlay.on('pointerout', () => { 
+          this.mousePointerisOverPlay = false; 
+        });
 
         this.mouseOptions.on('pointerover', () => { 
           this.mousePointerisOverOptions = true;
           this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
+        });
+        this.mouseOptions.on('pointerout', () => { 
+          this.mousePointerisOverOptions = false;
+          //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
         
     }
@@ -51,6 +59,12 @@ class Menu extends Phaser.Scene {
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverPlay){
         //console.log('Is mouse working?');
         this.scene.start("playScene");
+        this.sound.play('selected', {volume: 1 * volumeMultiplier});
+      }
+
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverOptions){
+        console.log('Is mouse working?');
+        //this.scene.start("playScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
 
