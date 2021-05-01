@@ -50,6 +50,7 @@ class Menu extends Phaser.Scene {
         });
         this.mouseOptions.on('pointerout', () => { 
           this.mousePointerisOverOptions = false;
+          
           //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
         
@@ -66,6 +67,7 @@ class Menu extends Phaser.Scene {
         console.log('Is mouse working?');
         //this.scene.start("playScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
+        this.sys.game.destroy(true);
       }
 
 
