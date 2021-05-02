@@ -34,6 +34,9 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0, 0);
         */
 
+        // fixes tilemap tearing
+        this.cameras.roundPixels = true;
+
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 4) - borderPadding, 'playerShip', 0).setOrigin(0.5, 0.5);
         this.ship.setScale(0.15 * spriteScale);
@@ -106,9 +109,12 @@ class Play extends Phaser.Scene {
     update(time, delta) {
         // scroll background
         this.ocean.tilePositionY -= scrollSpeed + 1;
+        // this.background.y = Math.round(this.background.y);
 
-
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+        // restart game option 'r'
+        // TODO make sure restarting the game is a true restart
+        if (Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.musicPlaying.stop();
             this.scene.restart();
             playerHealth = 3;
             playerInvincible = false;
@@ -183,7 +189,8 @@ class Play extends Phaser.Scene {
         if(this.physics.collide(this.ship, this.treasure)) {
             this.treasure.y = 0 - this.treasure.height - game.config.height;
             this.treasure.x = Phaser.Math.Between(borderUISize + borderPadding + this.treasure.width, game.config.width - borderUISize - borderPadding - this.treasure.width);
-            this.bonusScore += 10;
+            this.bonusScore += 10 * scoreMultiplier;
+            scoreMultiplier += 0.5;
             this.sound.play('treasurePickup', {volume: 1 * volumeMultiplier});
             this.clock = this.time.delayedCall(10000, () => {
 
@@ -223,6 +230,27 @@ class Play extends Phaser.Scene {
     checkForGameOver(){
 
         if(playerHealth <= 0){
+            this.ship.destroy();
+            if(this.scoreCounter > highScore) {
+                highScore = this.scoreCounter;
+            }
+            
+            let scoreConfig = {
+                fontFamily: 'Courier',
+                fontSize: '28px',
+                backgroundColor: '#F3B141',
+                color: '#843605',
+                align: 'center',
+                padding: {
+                    top: 5,
+                    bottom: 5,
+                },
+                Width: 100
+            }
+            // This should be changed to look more like the game should look like
+            this.add.text(game.config.width/2, game.config.height/2 - 64, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2, 'High Score: ' + highScore, scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
             this.musicPlaying.stop();
             this.ocean.tilePositionY = 0;
