@@ -25,6 +25,8 @@ let scrollSpeed = 4;
 let spriteScale = 1;
 let shipVelocity = 0;
 let oldAngle = 0
+let scoreMultiplier = 1;
+let highScore = 0;
 
 let playerHealth = 3;
 let playerInvincible = false;
