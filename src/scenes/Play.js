@@ -96,10 +96,10 @@ class Play extends Phaser.Scene {
         this.gameOver = false;
 
         //Making the score show up
-        this.scoreCounter = 0;
+        scoreCounter = 0;
         this.bonusScore = 0;
         this.finalScore = 0;
-        this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'Booty Plundered ' + this.scoreCounter, scoreConfig);
+        this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'Booty Plundered ' + scoreCounter, scoreConfig);
         this.lifesRemaining = this.add.text(borderUISize + borderPadding + 510, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
     }
 
@@ -115,18 +115,18 @@ class Play extends Phaser.Scene {
             shipVelocity = 0;
         }
 
-        if(this.gameOver){
-            this.musicPlaying.stop();
-            this.ocean.tilePositionY = 0;
-        }
+        //if(this.gameOver){
+            
+            
+        //}
 
         if(!this.gameOver){
             this.checkForGameOver();
         
             // adding to the score
             this.finalScore += delta;
-            this.scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
-            this.scoreText.text = 'Booty Plundered: ' + this.scoreCounter;
+            scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
+            this.scoreText.text = 'Booty Plundered: ' + scoreCounter;
         
 
             // math for linking wheel turning to ship velocity
@@ -223,26 +223,11 @@ class Play extends Phaser.Scene {
     checkForGameOver(){
 
         if(playerHealth <= 0){
-            this.ship.destroy();
-            
-            
-            let scoreConfig = {
-                fontFamily: 'Courier',
-                fontSize: '28px',
-                backgroundColor: '#F3B141',
-                color: '#843605',
-                align: 'center',
-                padding: {
-                    top: 5,
-                    bottom: 5,
-                },
-                Width: 100
-            }
-            // This should be changed to look more like the game should look like
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
+            this.musicPlaying.stop();
+            this.ocean.tilePositionY = 0;
             this.sound.play('gameOver', { volume: 1 * volumeMultiplier });
+            this.scene.start("gameOverScene");
         }
     }
 

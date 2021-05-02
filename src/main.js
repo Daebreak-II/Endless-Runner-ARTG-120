@@ -2,7 +2,7 @@ let config = {
     type: Phaser.CANVAS,
     width: 800,  // originally 480
     height: 1000,  // originally 600
-    scene: [ Menu, Play ],
+    scene: [ Menu, Play, GameOver ],
     physics: {
         default: 'arcade',
         arcade: {debug: false} ,
@@ -28,6 +28,7 @@ let oldAngle = 0
 
 let playerHealth = 3;
 let playerInvincible = false;
+let scoreCounter = 0;
 
 // volume variables
 let volumeMultiplier = 0.25;
