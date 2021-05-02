@@ -6,6 +6,7 @@ class Play extends Phaser.Scene {
 
     preload() {
         // load images/tile sprites
+        this.load.image('playerUI', './Assets/sprites/playUI.png');
         this.load.image('playerShip', './Assets/sprites/playerShip.png');
         this.load.image('rock', './Assets/sprites/rock.png');
         this.load.image('treasure', './Assets/sprites/treasure.png');
@@ -23,9 +24,11 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        //const child = this.children.getAt(0);
         // place tile sprite
         this.ocean = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'waterbackground').setOrigin(0, 0);
-
+        
+        //this.children.depthSort(this.PlayersUI);
         /*
         // black borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0x000000).setOrigin(0, 0);
@@ -66,8 +69,8 @@ class Play extends Phaser.Scene {
 
         // adding in steering wheel, as a sprite
         this.wheel = this.add.sprite(game.config.width / 2, game.config.height / 2 ,'steeringWheel');
-        this.wheel.setScale(1);
-        this.wheel
+        this.wheel.setScale(0.75);
+        //this.playersUI = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'playerUI').setOrigin(0, 0);
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -135,6 +138,7 @@ class Play extends Phaser.Scene {
             scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
             this.scoreText.text = 'Booty Plundered: ' + scoreCounter;
 
+            // Checking your highest multiplier
             if(scoreMultiplier > highestMulti){
                 highestMulti = scoreMultiplier;
             }
