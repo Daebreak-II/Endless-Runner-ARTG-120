@@ -131,8 +131,13 @@ class Play extends Phaser.Scene {
         
             // adding to the score
             this.finalScore += delta;
+            timeValue = Math.floor(this.finalScore / 1000);
             scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
             this.scoreText.text = 'Booty Plundered: ' + scoreCounter;
+
+            if(scoreMultiplier > highestMulti){
+                highestMulti = scoreMultiplier;
+            }
         
 
             // math for linking wheel turning to ship velocity
@@ -231,26 +236,10 @@ class Play extends Phaser.Scene {
 
         if(playerHealth <= 0){
             this.ship.destroy();
-            if(this.scoreCounter > highScore) {
-                highScore = this.scoreCounter;
+            if(scoreCounter > highScore) {
+                highScore = scoreCounter;
             }
             
-            let scoreConfig = {
-                fontFamily: 'Courier',
-                fontSize: '28px',
-                backgroundColor: '#F3B141',
-                color: '#843605',
-                align: 'center',
-                padding: {
-                    top: 5,
-                    bottom: 5,
-                },
-                Width: 100
-            }
-            // This should be changed to look more like the game should look like
-            this.add.text(game.config.width/2, game.config.height/2 - 64, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2, 'High Score: ' + highScore, scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
             this.musicPlaying.stop();
             this.ocean.tilePositionY = 0;

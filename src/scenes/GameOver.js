@@ -64,6 +64,9 @@ class GameOver extends Phaser.Scene {
           width: 100
         }
         this.gameOverScore = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 250, scoreCounter, gameOverText);
+        this.timeShow = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 170, timeValue, gameOverText);
+        this.multiplierShow = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 85, highestMulti, gameOverText);
+        this.highScoreShow = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 5, highScore, gameOverText);
     }
 
     update(){
@@ -73,6 +76,7 @@ class GameOver extends Phaser.Scene {
         playerHealth = 3;
         playerInvincible = false;
         shipVelocity = 0;
+        timeValue = 0;
         this.scene.start("playScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
@@ -81,6 +85,7 @@ class GameOver extends Phaser.Scene {
         playerHealth = 3;
         playerInvincible = false;
         shipVelocity = 0;
+        timeValue = 0;
         this.scene.start("menuScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
         //this.sys.game.destroy(true);
