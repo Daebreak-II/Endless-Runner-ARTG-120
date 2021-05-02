@@ -38,7 +38,7 @@ class Play extends Phaser.Scene {
         */
 
         // fixes tilemap tearing
-        this.cameras.roundPixels = true;
+        // this.cameras.roundPixels = true;
 
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 4) - borderPadding, 'playerShip', 0).setOrigin(0.5, 0.5);
@@ -122,12 +122,8 @@ class Play extends Phaser.Scene {
             playerHealth = 3;
             playerInvincible = false;
             shipVelocity = 0;
+            scoreMultiplier = 1;
         }
-
-        //if(this.gameOver){
-            
-            
-        //}
 
         if(!this.gameOver){
             this.checkForGameOver();
@@ -139,8 +135,8 @@ class Play extends Phaser.Scene {
             this.scoreText.text = 'Booty Plundered: ' + scoreCounter;
 
             // Checking your highest multiplier
-            if(scoreMultiplier > highestMulti){
-                highestMulti = scoreMultiplier;
+            if(scoreMultiplier > highestMultiplier){
+                highestMultiplier = scoreMultiplier;
             }
         
 

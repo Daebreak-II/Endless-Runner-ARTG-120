@@ -65,7 +65,7 @@ class GameOver extends Phaser.Scene {
         }
         this.gameOverScore = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 250, scoreCounter, gameOverText);
         this.timeShow = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 170, timeValue + 's', gameOverText);
-        this.multiplierShow = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 85, highestMulti + 'x', gameOverText);
+        this.multiplierShow = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 85, highestMultiplier + 'x', gameOverText);
         this.highScoreShow = this.add.text(game.config.width / 2 + 25, game.config.height / 2 - 5, highScore, gameOverText);
     }
 

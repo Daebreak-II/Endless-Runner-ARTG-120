@@ -28,7 +28,7 @@ let oldAngle = 0
 let scoreMultiplier = 1;
 let highScore = 0;
 let timeValue = 0;
-let highestMulti = 0;
+let highestMultiplier = 0;
 
 let playerHealth = 3;
 let playerInvincible = false;
