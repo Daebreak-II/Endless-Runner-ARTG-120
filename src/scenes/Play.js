@@ -111,8 +111,10 @@ class Play extends Phaser.Scene {
         this.ocean.tilePositionY -= scrollSpeed + 1;
         // this.background.y = Math.round(this.background.y);
 
-
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+        // restart game option 'r'
+        // TODO make sure restarting the game is a true restart
+        if (Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.musicPlaying.stop();
             this.scene.restart();
             playerHealth = 3;
             playerInvincible = false;
