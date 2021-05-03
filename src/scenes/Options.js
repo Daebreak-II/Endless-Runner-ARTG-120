@@ -103,7 +103,52 @@ class Options extends Phaser.Scene {
         });
 
         this.volumeLevel = this.add.text(365, game.config.height/2 - 300, volumeMultiplier, optionsConfig);
+
+        // Selection for controls
+        this.selectLeftControls = this.add.sprite(325, game.config.height/2 - 100, 'leftarrow').setOrigin(0, 0);
+        this.selectLeftControls.setScale(0.5);
+
+        this.mouseLeftControls = this.selectLeftControls.setInteractive();
+
+
+        this.selectRightControls = this.add.image(600, game.config.height/2 - 100, 'right').setOrigin(0, 0);
+        this.selectRightControls.setScale(0.5);
+
+        this.mouseRightControls = this.selectRightControls.setInteractive();
+
+        this.mousePointerisOverLeftControls = false;
+
+        this.mousePointerisOverRightControls = false;
+  
+        //setting up mouse cursor over object
+        this.mouseLeftControls.on('pointerover', () => { 
+          this.mousePointerisOverLeftControls = true;
+          this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
+        });
         
+        this.mouseLeftControls.on('pointerout', () => { 
+          this.mousePointerisOverLeftControls = false; 
+        });
+
+        this.mouseRightControls.on('pointerover', () => { 
+          this.mousePointerisOverRightControls = true;
+          this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
+        });
+        this.mouseRightControls.on('pointerout', () => { 
+          this.mousePointerisOverRightControls = false;
+          
+          //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
+        });
+
+        this.mouseAreOn = "Mouse";
+        this.arrowsOn = "Arrow Keys";
+        if(mouseControlOn){
+          this.controlText = this.add.text(400, game.config.height/2 - 100, this.mouseAreOn, optionsConfig);
+        }
+        if(arrowControlsOn){
+          this.controlText = this.add.text(400, game.config.height/2 - 100, this.arrowsOn, optionsConfig);
+        }
+        this. controlOptions= this.add.text(50, game.config.height/2 - 100, 'Control Scheme: ', optionsConfig);
     }
     update(){
       
@@ -120,6 +165,25 @@ class Options extends Phaser.Scene {
         volumeMultiplier += 0.25;
         this.volumeLevel.text = volumeMultiplier;
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
+      }
+
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverLeftControls){
+        //console.log('Is mouse working?');
+        mouseControlOn = true;
+        arrowControlsOn = false;
+        console.log(mouseControlOn);
+        console.log(arrowControlsOn);
+        this.controlText.text = this.mouseAreOn;
+
+      }
+
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverRightControls){
+        console.log('Is mouse working?');
+        mouseControlOn = false;
+        arrowControlsOn = true;
+        console.log(mouseControlOn);
+        console.log(arrowControlsOn);
+        this.controlText.text = this.arrowsOn;
       }
 
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverPlay){

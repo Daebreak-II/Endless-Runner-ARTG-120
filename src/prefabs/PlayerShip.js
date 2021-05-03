@@ -20,15 +20,16 @@ class PlayerShip extends Phaser.Physics.Arcade.Sprite {
       }
       */
 
-      
-      // key-based movement
-      if(keyLEFT.isDown && this.velocity >= -500) {
-        shipVelocity -= this.turnSpeed;
-        // this sfx needs to be shorter
-        // this.shipCreaking.play();
-      } else if (keyRIGHT.isDown && this.velocity < 500) {
-        shipVelocity += this.turnSpeed;
-        // this.shipCreaking.play();
+      if(arrowControlsOn){
+        // key-based movement
+        if(keyLEFT.isDown && this.velocity >= -500) {
+          shipVelocity -= this.turnSpeed;
+          // this sfx needs to be shorter
+          // this.shipCreaking.play();
+        } else if (keyRIGHT.isDown && this.velocity < 500) {
+          shipVelocity += this.turnSpeed;
+          // this.shipCreaking.play();
+        }
       }
       
 

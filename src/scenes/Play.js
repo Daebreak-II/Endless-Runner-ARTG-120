@@ -105,12 +105,14 @@ class Play extends Phaser.Scene {
 
 
         // adding in steering wheel, as a sprite
-        this.wheel = this.add.sprite(game.config.width / 2, game.config.height / 2 ,'steeringWheel');
-        this.wheel.setScale(0.75);
+        if(mouseControlOn){
+            this.wheel = this.add.sprite(game.config.width / 2, game.config.height / 2 ,'steeringWheel');
+            this.wheel.setScale(0.75);
         //this.playersUI = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'playerUI').setOrigin(0, 0);
 
         // logging initial mouse angle
-        oldAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
+            oldAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
+        }
 
         // font for the text (not final)
         let scoreConfig = {
@@ -196,18 +198,21 @@ class Play extends Phaser.Scene {
             this.timerShowing.text = timeValue + 's'
 
             // math for linking wheel turning to ship velocity
-            let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
+            if(mouseControlOn){
+                let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
         
 
-            // turning controls
-            if (game.input.activePointer.leftButtonDown()) {
-                this.wheel.setRotation(newAngle + Math.PI / 2);
-                // change velocity based off change in mouse angle, special case for going from 180 to -180 and vice versa
-                if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
-                    shipVelocity -= (oldAngle + newAngle) * 20;
-                } else {
-                    shipVelocity -= (oldAngle - newAngle) * 20;
+                // turning controls
+                if (game.input.activePointer.leftButtonDown()) {
+                    this.wheel.setRotation(newAngle + Math.PI / 2);
+                    // change velocity based off change in mouse angle, special case for going from 180 to -180 and vice versa
+                    if ( (oldAngle - newAngle) > 3 || (oldAngle - newAngle) < -3) {
+                        shipVelocity -= (oldAngle + newAngle) * 20;
+                    } else {
+                        shipVelocity -= (oldAngle - newAngle) * 20;
+                    }
                 }
+                oldAngle = newAngle;
             }
 
             // firing canon Ball
@@ -230,8 +235,7 @@ class Play extends Phaser.Scene {
             } else if (shipVelocity <= -500) {
                 shipVelocity = -500;
             }
-            oldAngle = newAngle;
-        
+            //oldAngle = newAngle;
             // Updating objects, groups automatically updated
             this.treasure.update();
             this.ship.update();
