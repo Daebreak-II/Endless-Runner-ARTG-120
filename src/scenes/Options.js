@@ -171,16 +171,11 @@ class Options extends Phaser.Scene {
         //console.log('Is mouse working?');
         mouseControlOn = true;
         arrowControlsOn = false;
-        console.log(mouseControlOn);
-        console.log(arrowControlsOn);
         this.controlText.text = this.mouseAreOn;
 
       }
 
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverRightControls){
-        console.log('Is mouse working?');
-        mouseControlOn = false;
-        arrowControlsOn = true;
         console.log(mouseControlOn);
         console.log(arrowControlsOn);
         this.controlText.text = this.arrowsOn;
