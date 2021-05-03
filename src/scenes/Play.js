@@ -145,7 +145,7 @@ class Play extends Phaser.Scene {
         scoreCounter = 0;
         this.bonusScore = 0;
         this.finalScore = 0;
-        this.scoreText = this.add.text(borderUISize + borderPadding + 350, borderUISize + borderPadding*2 + 23, scoreCounter, scoreConfig);
+        this.scoreText = this.add.text(borderUISize + borderPadding + 350, borderUISize + borderPadding*2 + 20, scoreCounter, scoreConfig);
         this.lifesRemaining = this.add.text(borderUISize + borderPadding + 665, borderUISize + borderPadding*2 + 7, playerHealth, scoreConfig);
         this.scoreMultiplierText = this.add.text(borderUISize + borderPadding + 497, borderUISize + borderPadding*2 - 10, scoreMultiplier + 'x', multiplierConfig);
         this.timerShowing = this.add.text(borderUISize + borderPadding + 25, borderUISize + borderPadding*2 + 7, timeValue + 's', scoreConfig);

@@ -59,7 +59,7 @@ class Menu extends Phaser.Scene {
       
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverPlay){
         //console.log('Is mouse working?');
-        this.scene.start("playScene");
+        this.scene.start("controlScene");
         //this.scene.start("gameOverScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
