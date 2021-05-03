@@ -27,7 +27,7 @@ class Play extends Phaser.Scene {
         this.load.audio('wave3', './Assets/sfx/Wave_Crashing_3.wav');
         this.load.audio('playerCannon', './Assets/sfx/PlayerCannonballShot.mp3');
         this.load.audio('rockBreaking', './Assets/sfx/RockBreaking.wav');
-        this.load.audio('enemyShipDamage', './Assets/sfx/enemyShipBreaking.wav');
+        this.load.audio('enemyShipDamage', './Assets/sfx/EnemyShipBreaking.wav');
         this.load.audio('treasureDamage', './Assets/sfx/Cannonball_Pick_Up.mp3');
         
     }

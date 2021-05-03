@@ -57,8 +57,8 @@ class Options extends Phaser.Scene {
         this.mouseLeftVolume = this.selectLeftVolume.setInteractive();
 
 
-        this.selectRightVolume = this.add.image(250, game.config.height/2 + 305, 'quit').setOrigin(0, 0);
-        this.selectOptions.setScale(0.5);
+        this.selectRightVolume = this.add.image(250, game.config.height/2 + 305, 'right').setOrigin(0, 0);
+        this.selectRightVolume.setScale(0.5);
 
         this.mouseOptions = this.selectOptions.setInteractive();
         
