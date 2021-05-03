@@ -76,13 +76,14 @@ class Play extends Phaser.Scene {
         
         // add treasure 
         this.treasure = new Treasure(this, game.config.width / 2, 0 - game.config.height + borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0);
-        this.treasure.setScale(0.3 * spriteScale);
-        this.treasure.setSize(this.treasure.width * 3/4, this.treasure.height * 3/4);
+        this.treasure.setScale(0.2 * spriteScale);
+        // this.treasure.setSize(this.treasure.width * 3/4, this.treasure.height * 3/4);
 
         // adding in enemy ship
-        this.enemyShip = new EnemyShip(this, game.config.width * 1/2, 0 - game.config.height * 2, 'enemyShip', 0).setOrigin(0.5, 0);
-
-
+        this.enemyShip = new EnemyShip(this, game.config.width * 1/2, 0 - game.config.height * 1.75, 'enemyShip', 0).setOrigin(0.5, 0.5);
+        this.enemyShip.setScale(0.15 * spriteScale);
+        this.enemyShip.setSize(this.enemyShip.width * 1.2, this.enemyShip.height * 1/3);
+        this.enemyShip.setAngle(90);
 
         // adding groups for cannonBalls
         this.pCannonBalls = this.physics.add.group();
@@ -180,7 +181,7 @@ class Play extends Phaser.Scene {
                 this.pCannonBall.setScale(0.1 * spriteScale);
                 // this.pCannonBall.setSize(this.pCannonBall.width * spriteScale, this.pCannonBall.height * spriteScale);
                 this.pCannonBalls.add(this.pCannonBall);
-                this.clock = this.time.delayedCall(1500, () => {
+                this.clock = this.time.delayedCall(2000, () => {
                     CannonOnCooldown = false;
                 }, null, this);
             }
@@ -197,6 +198,7 @@ class Play extends Phaser.Scene {
             // Updating objects, groups automatically updated
             this.treasure.update();
             this.ship.update();
+            this.enemyShip.update();
 
             // speed up game based on time
             scrollSpeed = 4 + (this.finalScore / 30000);
@@ -227,6 +229,52 @@ class Play extends Phaser.Scene {
             scoreMultiplier += 0.5;
             this.sound.play('treasurePickup', {volume: 1 * volumeMultiplier});
         }
+
+        // running into enemy Ship
+        if (this.physics.collide(this.ship, this.enemyShip) && playerInvincible == false) {
+            playerInvincible = true;
+            playerHealth -= 1;
+            this.enemyShip.respawn();
+            this.cameras.main.shake(200, 0.01);
+            this.ship.setAlpha(0.7);
+            this.lifesRemaining.text = 'Health Left: ' + playerHealth;
+            this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
+            this.clock = this.time.delayedCall(2000, () => {
+                this.ship.setAlpha(1);
+                playerInvincible = false;
+            }, null, this);
+        }
+
+        // enemy ship hitting rock
+        if (this.physics.collide(this.rockGroup, this.enemyShip)) {
+            if(this.enemyShip.y >= 0) {
+                this.enemyShip.respawn();
+                this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
+            } else {
+                this.enemyShip.respawn();
+            }
+        }
+
+        // cannonball hitting rock, might not destroy the right canonBall
+        if (this.physics.collide(this.pCannonBalls, this.rockGroup)) {
+            this.pCannonBall.destroy();
+            // play cancnonball pickup noise
+        }
+    
+        // cannonball hitting enemy ship
+        if (this.physics.collide(this.pCannonBalls, this.enemyShip)) {
+            this.enemyShip.respawn();
+            this.pCannonBall.destroy();
+            this.bonusScore += 10 * scoreMultiplier;
+            this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
+        }
+
+        // cannonball hitting Treasure
+        if (this.physics.collide(this.pCannonBalls, this.treasure)) {
+            this.pCannonBall.destroy();
+            this.treasure.respawn();
+            // play cannonball pickup noise
+        } 
 
         // respawn rocks so they don't overlap
         if(this.physics.collide(this.rock01, this.rock02)) {

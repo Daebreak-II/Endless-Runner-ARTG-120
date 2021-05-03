@@ -76,6 +76,7 @@ class GameOver extends Phaser.Scene {
         playerHealth = 3;
         playerInvincible = false;
         shipVelocity = 0;
+        CannonOnCooldown = false;
         timeValue = 0;
         this.scene.start("playScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
