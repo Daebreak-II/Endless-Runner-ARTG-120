@@ -81,9 +81,9 @@ class Play extends Phaser.Scene {
         // this.treasure.setSize(this.treasure.width * 3/4, this.treasure.height * 3/4);
 
         // adding in enemy ship
-        this.enemyShip = new EnemyShip(this, game.config.width * 1/2, 0 - game.config.height * 1.75, 'enemyShip', 0).setOrigin(0.5, 0.5);
+        this.enemyShip = new EnemyShip(this, game.config.width * 1/2, 0 - game.config.height * 1.3, 'enemyShip', 0).setOrigin(0.5, 0.5);
         this.enemyShip.setScale(0.15 * spriteScale);
-        this.enemyShip.setSize(this.enemyShip.width * 1.2, this.enemyShip.height * 1/3);
+        this.enemyShip.setSize(this.enemyShip.width * 1.1, this.enemyShip.height * 0.45);
         this.enemyShip.setAngle(90);
 
         // adding groups for cannonBalls
@@ -204,7 +204,7 @@ class Play extends Phaser.Scene {
                 this.pCannonBall.setScale(0.1 * spriteScale);
                 // this.pCannonBall.setSize(this.pCannonBall.width * spriteScale, this.pCannonBall.height * spriteScale);
                 this.pCannonBalls.add(this.pCannonBall);
-                this.clock = this.time.delayedCall(2000, () => {
+                this.clock = this.time.delayedCall(1000, () => {
                     CannonOnCooldown = false;
                 }, null, this);
             }
@@ -280,21 +280,21 @@ class Play extends Phaser.Scene {
 
         // cannonball hitting rock, might not destroy the right canonBall
         if (this.physics.collide(this.pCannonBalls, this.rockGroup)) {
-            this.pCannonBall.destroy();
+            this.pCannonBalls.remove(this.pCannonBalls.getFirstAlive(), true, true);
             // play cancnonball pickup noise
         }
     
         // cannonball hitting enemy ship
         if (this.physics.collide(this.pCannonBalls, this.enemyShip)) {
             this.enemyShip.respawn();
-            this.pCannonBall.destroy();
+            this.pCannonBalls.remove(this.pCannonBalls.getFirstAlive(), true, true);
             this.bonusScore += 10 * scoreMultiplier;
             this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
         }
 
         // cannonball hitting Treasure
         if (this.physics.collide(this.pCannonBalls, this.treasure)) {
-            this.pCannonBall.destroy();
+            this.pCannonBalls.remove(this.pCannonBalls.getFirstAlive(), true, true);
             this.treasure.respawn();
             // play cannonball pickup noise
         } 
