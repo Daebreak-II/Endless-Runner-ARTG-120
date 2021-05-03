@@ -162,9 +162,11 @@ class Options extends Phaser.Scene {
       }
 
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverRightVolume){
-        volumeMultiplier += 0.25;
-        this.volumeLevel.text = volumeMultiplier;
-        this.sound.play('selected', {volume: 1 * volumeMultiplier});
+        if(volumeMultiplier < 5){
+          volumeMultiplier += 0.25;
+          this.volumeLevel.text = volumeMultiplier;
+          this.sound.play('selected', {volume: 1 * volumeMultiplier});
+        }
       }
 
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverLeftControls){
