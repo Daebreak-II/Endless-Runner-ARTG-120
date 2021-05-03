@@ -25,14 +25,14 @@ class Menu extends Phaser.Scene {
         this.mousePlay = this.selectPlay.setInteractive();
 
 
-        this.selectOptions = this.add.image(250, game.config.height/2 + 305, 'quit').setOrigin(0, 0);
-        this.selectOptions.setScale(0.5);
+        this.selectQuit = this.add.image(250, game.config.height/2 + 305, 'quit').setOrigin(0, 0);
+        this.selectQuit.setScale(0.5);
 
         this.mouseOptions = this.selectOptions.setInteractive();
         
         this.mousePointerisOverPlay = false;
 
-        this.mousePointerisOverOptions = false;
+        this.mousePointerisOverQuit = false;
   
         //setting up mouse cursor over object
         this.mousePlay.on('pointerover', () => { 
@@ -45,11 +45,11 @@ class Menu extends Phaser.Scene {
         });
 
         this.mouseOptions.on('pointerover', () => { 
-          this.mousePointerisOverOptions = true;
+          this.mousePointerisOverQuit = true;
           this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
         this.mouseOptions.on('pointerout', () => { 
-          this.mousePointerisOverOptions = false;
+          this.mousePointerisOverQuit = false;
           
           //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
@@ -64,7 +64,7 @@ class Menu extends Phaser.Scene {
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
 
-      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverOptions){
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverQuit){
         //console.log('Is mouse working?');
         //this.scene.start("playScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
