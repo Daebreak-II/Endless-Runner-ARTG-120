@@ -33,7 +33,7 @@ class EnemyShip extends Phaser.Physics.Arcade.Sprite {
     }
 
     respawn() {
-        this.y = 0 - game.config.height * 2;
+        this.y = 0 - game.config.height * 1.5;
     }
 
     fireCanon() {
