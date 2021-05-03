@@ -7,7 +7,7 @@ class PlayerShip extends Phaser.Physics.Arcade.Sprite {
       scene.physics.add.existing(this);
       this.moveSpeed = 2; 
       this.velocity = 0;
-      this.turnSpeed = 5;
+      this.turnSpeed = 8;
     }
 
     update() {

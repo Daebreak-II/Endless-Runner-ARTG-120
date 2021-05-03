@@ -31,7 +31,7 @@ class Play extends Phaser.Scene {
         this.load.audio('enemyShipDamage', './Assets/sfx/EnemyShipBreaking.wav');
         this.load.audio('treasureDamage', './Assets/sfx/Cannonball_Pick_Up.mp3');
         // load animations
-        this.load.spritesheet('treasurePickupAnim', './Assest/animations/???', {frameWidth: x, frameHeight: y, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('treasurePickupAnim', './Assest/animations/treasureanimation.png', {frameWidth: 111, frameHeight: 200, startFrame: 0, endFrame: 9});
     }
 
     create() {
