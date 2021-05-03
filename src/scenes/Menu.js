@@ -28,7 +28,7 @@ class Menu extends Phaser.Scene {
         this.selectQuit = this.add.image(250, game.config.height/2 + 305, 'quit').setOrigin(0, 0);
         this.selectQuit.setScale(0.5);
 
-        this.mouseOptions = this.selectOptions.setInteractive();
+        this.mouseQuit = this.selectQuit.setInteractive();
         
         this.mousePointerisOverPlay = false;
 
@@ -44,11 +44,11 @@ class Menu extends Phaser.Scene {
           this.mousePointerisOverPlay = false; 
         });
 
-        this.mouseOptions.on('pointerover', () => { 
+        this.mouseQuit.on('pointerover', () => { 
           this.mousePointerisOverQuit = true;
           this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
-        this.mouseOptions.on('pointerout', () => { 
+        this.mouseQuit.on('pointerout', () => { 
           this.mousePointerisOverQuit = false;
           
           //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
