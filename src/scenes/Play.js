@@ -25,6 +25,11 @@ class Play extends Phaser.Scene {
         this.load.audio('wave1', './Assets/sfx/Wave_Crashing_1.wav');
         this.load.audio('wave2', './Assets/sfx/Wave_Crashing_2.wav');
         this.load.audio('wave3', './Assets/sfx/Wave_Crashing_3.wav');
+        this.load.audio('playerCannon', './Assets/sfx/PlayerCannonballShot.mp3');
+        this.load.audio('rockBreaking', './Assets/sfx/RockBreaking.wav');
+        this.load.audio('enemyShipDamage', './Assets/sfx/EnemyShipBreaking.wav');
+        this.load.audio('treasureDamage', './Assets/sfx/Cannonball_Pick_Up.mp3');
+        
     }
 
     create() {
@@ -204,6 +209,7 @@ class Play extends Phaser.Scene {
                 this.pCannonBall.setScale(0.1 * spriteScale);
                 // this.pCannonBall.setSize(this.pCannonBall.width * spriteScale, this.pCannonBall.height * spriteScale);
                 this.pCannonBalls.add(this.pCannonBall);
+                this.sound.play('playerCannon', {volume: 2 * volumeMultiplier});
                 this.clock = this.time.delayedCall(1000, () => {
                     CannonOnCooldown = false;
                 }, null, this);
@@ -250,7 +256,7 @@ class Play extends Phaser.Scene {
             this.treasure.x = Phaser.Math.Between(borderUISize + borderPadding + this.treasure.width, game.config.width - borderUISize - borderPadding - this.treasure.width);
             this.bonusScore += 10 * scoreMultiplier;
             scoreMultiplier += 0.5;
-            this.sound.play('treasurePickup', {volume: 1 * volumeMultiplier});
+            this.sound.play('treasurePickup', {volume: 1.3 * volumeMultiplier});
         }
 
         // running into enemy Ship
@@ -262,6 +268,7 @@ class Play extends Phaser.Scene {
             this.ship.setAlpha(0.7);
             this.lifesRemaining.text = playerHealth;
             this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
+            this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
             this.clock = this.time.delayedCall(2000, () => {
                 this.ship.setAlpha(1);
                 playerInvincible = false;
@@ -272,7 +279,7 @@ class Play extends Phaser.Scene {
         if (this.physics.collide(this.rockGroup, this.enemyShip)) {
             if(this.enemyShip.y >= 0) {
                 this.enemyShip.respawn();
-                this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
+                this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
             } else {
                 this.enemyShip.respawn();
             }
@@ -281,7 +288,7 @@ class Play extends Phaser.Scene {
         // cannonball hitting rock, might not destroy the right canonBall
         if (this.physics.collide(this.pCannonBalls, this.rockGroup)) {
             this.pCannonBalls.remove(this.pCannonBalls.getFirstAlive(), true, true);
-            // play cancnonball pickup noise
+            this.sound.play('rockBreaking', {volume: 0.25 * volumeMultiplier});
         }
     
         // cannonball hitting enemy ship
@@ -289,14 +296,14 @@ class Play extends Phaser.Scene {
             this.enemyShip.respawn();
             this.pCannonBalls.remove(this.pCannonBalls.getFirstAlive(), true, true);
             this.bonusScore += 10 * scoreMultiplier;
-            this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
+            this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
         }
 
         // cannonball hitting Treasure
         if (this.physics.collide(this.pCannonBalls, this.treasure)) {
             this.pCannonBalls.remove(this.pCannonBalls.getFirstAlive(), true, true);
             this.treasure.respawn();
-            // play cannonball pickup noise
+            this.sound.play('treasureDamage', {volume: 1.5 * volumeMultiplier});
         } 
 
         // respawn rocks so they don't overlap

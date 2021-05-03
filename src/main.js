@@ -39,4 +39,5 @@ let scoreCounter = 0;
 // volume variables
 let volumeMultiplier = 0.25;
 let waveSfx = false;
+let rockSfx = false;
 
