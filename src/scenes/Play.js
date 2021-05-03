@@ -31,7 +31,7 @@ class Play extends Phaser.Scene {
         this.load.audio('enemyShipDamage', './Assets/sfx/EnemyShipBreaking.wav');
         this.load.audio('treasureDamage', './Assets/sfx/Cannonball_Pick_Up.mp3');
         // load animations
-        this.load.spritesheet('treasurePickupAnim', './Assest/animations/treasureanimation.png', {frameWidth: 111, frameHeight: 200, startFrame: 0, endFrame: 9});
+        this.load.spritesheet('treasurePickupAnim', './Assets/animations/treasureanimation.png', {frameWidth: 111, frameHeight: 200, startFrame: 0, endFrame: 9});
     }
 
     create() {
@@ -51,8 +51,8 @@ class Play extends Phaser.Scene {
         // create animations
         this.anims.create({
             key: 'treasurePickupAnim',
-            frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 9, first: 0}),
-            frameRate: 30
+            frames: this.anims.generateFrameNumbers('treasurePickupAnim', {start: 0, end: 9, first: 0}),
+            frameRate: 8
         });
 
 
@@ -257,12 +257,12 @@ class Play extends Phaser.Scene {
 
         // pickup treasure
         if(this.physics.collide(this.ship, this.treasure)) {
+            this.treasurePickup();
             this.treasure.y = 0 - this.treasure.height - game.config.height;
             this.treasure.x = Phaser.Math.Between(borderUISize + borderPadding + this.treasure.width, game.config.width - borderUISize - borderPadding - this.treasure.width);
             this.bonusScore += 10 * scoreMultiplier;
             scoreMultiplier += 0.5;
             this.sound.play('treasurePickup', {volume: 1.3 * volumeMultiplier});
-            this.treasurePickup();
         }
 
         // running into enemy Ships
