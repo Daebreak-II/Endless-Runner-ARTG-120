@@ -47,6 +47,13 @@ class Options extends Phaser.Scene {
           },
           width: 100
       }
+
+        this.selectPlay = this.add.sprite(250, game.config.height/2 + 300, 'play').setOrigin(0, 0);
+        this.selectPlay.setScale(0.5);
+
+        this.mousePlay = this.selectPlay.setInteractive();
+
+        
         this.titleOptions = this.add.text(game.config.width / 2 - 120, 0, 'Options', titleConfig);
         this.soundVolume = this.add.text(50, 200, 'Volume: ', optionsConfig);
 
@@ -61,6 +68,8 @@ class Options extends Phaser.Scene {
         this.selectRightVolume.setScale(0.5);
 
         this.mouseRightVolume = this.selectRightVolume.setInteractive();
+
+        this.mousePointerisOverPlay = false;
         
         this.mousePointerisOverLeftVolume = false;
 
@@ -85,6 +94,13 @@ class Options extends Phaser.Scene {
           
           //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
+        this.mousePlay.on('pointerover', () => { 
+          this.mousePointerisOverPlay = true;
+          this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
+        });
+        this.mousePlay.on('pointerout', () => { 
+          this.mousePointerisOverPlay = false; 
+        });
 
         this.volumeLevel = this.add.text(365, game.config.height/2 - 300, volumeMultiplier, optionsConfig);
         
@@ -103,6 +119,13 @@ class Options extends Phaser.Scene {
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverRightVolume){
         volumeMultiplier += 0.25;
         this.volumeLevel.text = volumeMultiplier;
+        this.sound.play('selected', {volume: 1 * volumeMultiplier});
+      }
+
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverPlay){
+        //console.log('Is mouse working?');
+        this.scene.start("controlScene");
+        //this.scene.start("gameOverScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
 
