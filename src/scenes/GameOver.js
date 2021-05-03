@@ -78,6 +78,7 @@ class GameOver extends Phaser.Scene {
         shipVelocity = 0;
         CannonOnCooldown = false;
         timeValue = 0;
+        scoreMultiplier = 1;
         this.scene.start("playScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
@@ -87,6 +88,7 @@ class GameOver extends Phaser.Scene {
         playerInvincible = false;
         shipVelocity = 0;
         timeValue = 0;
+        scoreMultiplier = 1;
         this.scene.start("menuScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
         //this.sys.game.destroy(true);

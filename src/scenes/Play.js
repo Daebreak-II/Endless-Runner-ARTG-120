@@ -15,6 +15,7 @@ class Play extends Phaser.Scene {
         this.load.image('enemyShip', './Assets/sprites/enemyShip.png');
         this.load.image('enemyCannonBall', './Assets/sprites/enemycannonball.png');
         this.load.image('playerCannonBall', './Assets/sprites/playercannonball.png');
+        this.load.image('playUI', './Assets/sprites/gameUI.png');
         this.load.audio('music', './Assets/sfx/Traveling Through the Endless Ocean.mp3');
         this.load.audio('shipDamage', './Assets/sfx/Ship_Breaking_Down.wav');
         this.load.audio('shipCreaking', './Assets/sfx/Ship_Creaking.wav');
@@ -100,11 +101,26 @@ class Play extends Phaser.Scene {
 
         // font for the text (not final)
         let scoreConfig = {
-            fontFamily: 'Courier',
+            fontFamily: 'Monotype Corsiva',
+            fontSize: '36px',
+            color: '#000',
+            stroke: '#000',
+            strokeThickness: 2,
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            width: 100
+        }
+
+        let multiplierConfig = {
+            fontFamily: 'Monotype Corsiva',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
+            color: '#000',
+            stroke: '#000',
+            strokeThickness: 2,
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5,
@@ -116,13 +132,18 @@ class Play extends Phaser.Scene {
         this.musicPlaying = this.sound.add("music", { volume: 0.5 * volumeMultiplier, loop: true });
         this.musicPlaying.play();
 
+        // player UI
+
+        this.playerUI = this.add.sprite(game.config.width / 2, 60, 'playUI');
+
         //Making the score show up
         scoreCounter = 0;
         this.bonusScore = 0;
         this.finalScore = 0;
-        this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'Booty Plundered ' + scoreCounter, scoreConfig);
-        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 510, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
-
+        this.scoreText = this.add.text(borderUISize + borderPadding + 350, borderUISize + borderPadding*2 + 23, scoreCounter, scoreConfig);
+        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 665, borderUISize + borderPadding*2 + 7, playerHealth, scoreConfig);
+        this.scoreMultiplierText = this.add.text(borderUISize + borderPadding + 497, borderUISize + borderPadding*2 - 10, scoreMultiplier + 'x', multiplierConfig);
+        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 25, borderUISize + borderPadding*2 + 7, timeValue + 's', scoreConfig);
         //making a game over check
         this.gameOver = false;
     }
@@ -151,13 +172,15 @@ class Play extends Phaser.Scene {
             this.finalScore += delta;
             timeValue = Math.floor(this.finalScore / 1000);
             scoreCounter = Math.floor(this.finalScore / 1000) + this.bonusScore;
-            this.scoreText.text = 'Booty Plundered: ' + scoreCounter;
+            this.scoreText.text = scoreCounter;
 
             // Checking your highest multiplier
             if(scoreMultiplier > highestMultiplier){
                 highestMultiplier = scoreMultiplier;
             }
-        
+
+            this.scoreMultiplierText.text = scoreMultiplier + 'x';
+            this.lifesRemaining.text = timeValue + 's'
 
             // math for linking wheel turning to ship velocity
             let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
@@ -212,7 +235,7 @@ class Play extends Phaser.Scene {
                 playerHealth -= 1;
                 this.cameras.main.shake(200, 0.01);
                 this.ship.setAlpha(0.7);
-                this.lifesRemaining.text = 'Health Left: ' + playerHealth;
+                this.lifesRemaining.text = playerHealth;
                 this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
                 this.clock = this.time.delayedCall(2000, () => {
                     this.ship.setAlpha(1);
@@ -237,7 +260,7 @@ class Play extends Phaser.Scene {
             this.enemyShip.respawn();
             this.cameras.main.shake(200, 0.01);
             this.ship.setAlpha(0.7);
-            this.lifesRemaining.text = 'Health Left: ' + playerHealth;
+            this.lifesRemaining.text = playerHealth;
             this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
             this.clock = this.time.delayedCall(2000, () => {
                 this.ship.setAlpha(1);
