@@ -176,6 +176,8 @@ class Options extends Phaser.Scene {
       }
 
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverRightControls){
+        mouseControlOn = false;
+        arrowControlsOn = true;
         this.controlText.text = this.arrowsOn;
       }
 
