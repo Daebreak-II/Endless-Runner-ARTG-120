@@ -143,7 +143,7 @@ class Play extends Phaser.Scene {
         this.scoreText = this.add.text(borderUISize + borderPadding + 350, borderUISize + borderPadding*2 + 23, scoreCounter, scoreConfig);
         this.lifesRemaining = this.add.text(borderUISize + borderPadding + 665, borderUISize + borderPadding*2 + 7, playerHealth, scoreConfig);
         this.scoreMultiplierText = this.add.text(borderUISize + borderPadding + 497, borderUISize + borderPadding*2 - 10, scoreMultiplier + 'x', multiplierConfig);
-        this.lifesRemaining = this.add.text(borderUISize + borderPadding + 25, borderUISize + borderPadding*2 + 7, timeValue + 's', scoreConfig);
+        this.timerShowing = this.add.text(borderUISize + borderPadding + 25, borderUISize + borderPadding*2 + 7, timeValue + 's', scoreConfig);
         //making a game over check
         this.gameOver = false;
     }
@@ -180,7 +180,7 @@ class Play extends Phaser.Scene {
             }
 
             this.scoreMultiplierText.text = scoreMultiplier + 'x';
-            this.lifesRemaining.text = timeValue + 's'
+            this.timerShowing.text = timeValue + 's'
 
             // math for linking wheel turning to ship velocity
             let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
