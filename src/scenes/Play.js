@@ -27,7 +27,7 @@ class Play extends Phaser.Scene {
         this.load.audio('wave3', './Assets/sfx/Wave_Crashing_3.wav');
         this.load.audio('playerCannon', './Assets/sfx/PlayerCannonballShot.mp3');
         this.load.audio('rockBreaking', './Assets/sfx/RockBreaking.wav');
-        this.load.audio('enemyShipDamage', './Assets/sfx/EnemyShipBreaking.wav');
+        this.load.audio('enemyShipDamage', './Assets/sfx/enemyShipBreaking.wav');
         this.load.audio('treasureDamage', './Assets/sfx/Cannonball_Pick_Up.mp3');
         
     }
@@ -67,29 +67,37 @@ class Play extends Phaser.Scene {
 
         this.rock01 = new Rock(this, game.config.width * 1/4, 0 - game.config.height * 1/3, 'rock', 0).setOrigin(0.5, 0);
         this.rock02 = new Rock(this, game.config.width * 3/4, 0 - game.config.height * 1, 'rock', 0).setOrigin(0.5, 0);
-        this.rock03 = new Rock(this, game.config.width * 1/4, 0 - game.config.height * 5/3, 'rock', 0).setOrigin(0.5, 0);
+        // this.rock03 = new Rock(this, game.config.width * 1/4, 0 - game.config.height * 5/3, 'rock', 0).setOrigin(0.5, 0);
         
         this.rockGroup.add(this.rock01);
         this.rockGroup.add(this.rock02);
-        this.rockGroup.add(this.rock03);
+        // this.rockGroup.add(this.rock03);
 
         this.rock01.setScale(0.5 * spriteScale);
         this.rock02.setScale(0.5 * spriteScale);
-        this.rock03.setScale(0.5 * spriteScale);
+        // this.rock03.setScale(0.5 * spriteScale);
         this.rock01.setSize(this.rock01.width * 2/3, this.rock01.height * 1/2);
         this.rock02.setSize(this.rock02.width * 2/3, this.rock02.height * 1/2);
-        this.rock03.setSize(this.rock02.width * 2/3, this.rock02.height * 1/2);
+        // this.rock03.setSize(this.rock02.width * 2/3, this.rock02.height * 1/2);
         
         // add treasure 
         this.treasure = new Treasure(this, game.config.width / 2, 0 - game.config.height + borderUISize + borderPadding, 'treasure', 0).setOrigin(0.5, 0);
         this.treasure.setScale(0.2 * spriteScale);
         // this.treasure.setSize(this.treasure.width * 3/4, this.treasure.height * 3/4);
 
-        // adding in enemy ship
-        this.enemyShip = new EnemyShip(this, game.config.width * 1/2, 0 - game.config.height * 1.3, 'enemyShip', 0).setOrigin(0.5, 0.5);
-        this.enemyShip.setScale(0.15 * spriteScale);
-        this.enemyShip.setSize(this.enemyShip.width * 1.1, this.enemyShip.height * 0.45);
-        this.enemyShip.setAngle(90);
+        // adding in enemy ships
+        this.enemyShip01 = new EnemyShip(this, game.config.width * 1/2, 0 - game.config.height * 1.3, 'enemyShip', 0).setOrigin(0.5, 0.5);
+        this.enemyShip01.setScale(0.15 * spriteScale);
+        this.enemyShip01.setSize(this.enemyShip01.width * 1.1, this.enemyShip01.height * 0.45);
+        this.enemyShip01.setAngle(90);
+
+        this.enemyShip02 = new EnemyShip(this, game.config.width * 1/2, 0 - game.config.height * 1.8, 'enemyShip', 0).setOrigin(0.5, 0.5);
+        this.enemyShip02.setScale(0.15 * spriteScale);
+        this.enemyShip02.setSize(this.enemyShip02.width * 1.1, this.enemyShip02.height * 0.45);
+        this.enemyShip02.setAngle(-90);
+        this.enemyShip02.moveSpeedX *= -1;
+
+
 
         // adding groups for cannonBalls
         this.pCannonBalls = this.physics.add.group();
@@ -227,7 +235,8 @@ class Play extends Phaser.Scene {
             // Updating objects, groups automatically updated
             this.treasure.update();
             this.ship.update();
-            this.enemyShip.update();
+            this.enemyShip01.update();
+            this.enemyShip02.update();
 
             // speed up game based on time
             scrollSpeed = 4 + (this.finalScore / 30000);
@@ -235,19 +244,8 @@ class Play extends Phaser.Scene {
 
         // Checking Collisions
         // hitting rock
-        if(this.physics.collide(this.ship, this.rockGroup)) {
-            if(!playerInvincible) {
-                playerInvincible = true;
-                playerHealth -= 1;
-                this.cameras.main.shake(200, 0.01);
-                this.ship.setAlpha(0.7);
-                this.lifesRemaining.text = playerHealth;
-                this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
-                this.clock = this.time.delayedCall(2000, () => {
-                    this.ship.setAlpha(1);
-                    playerInvincible = false;
-                }, null, this);
-            }
+        if(this.physics.collide(this.ship, this.rockGroup) && !playerInvincible) {
+            this.playerDamage();
         }
 
         // pickup treasure
@@ -259,31 +257,48 @@ class Play extends Phaser.Scene {
             this.sound.play('treasurePickup', {volume: 1.3 * volumeMultiplier});
         }
 
-        // running into enemy Ship
-        if (this.physics.collide(this.ship, this.enemyShip) && playerInvincible == false) {
-            playerInvincible = true;
-            playerHealth -= 1;
-            this.enemyShip.respawn();
-            this.cameras.main.shake(200, 0.01);
-            this.ship.setAlpha(0.7);
-            this.lifesRemaining.text = playerHealth;
-            this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
+        // running into enemy Ships
+        if (this.physics.collide(this.ship, this.enemyShip01) && playerInvincible == false) {
+            this.enemyShip01.respawn();
             this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
-            this.clock = this.time.delayedCall(2000, () => {
-                this.ship.setAlpha(1);
-                playerInvincible = false;
-            }, null, this);
+            this.playerDamage();
+        }
+        if (this.physics.collide(this.ship, this.enemyShip02) && playerInvincible == false) {
+            this.enemyShip02.respawn();
+            this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
+            this.playerDamage();
         }
 
-        // enemy ship hitting rock
-        if (this.physics.collide(this.rockGroup, this.enemyShip)) {
-            if(this.enemyShip.y >= 0) {
-                this.enemyShip.respawn();
+        // enemy ships hitting rock
+        if (this.physics.collide(this.rockGroup, this.enemyShip01)) {
+            if(this.enemyShip01.y >= 0) {
+                this.enemyShip01.respawn();
                 this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
             } else {
-                this.enemyShip.respawn();
+                this.enemyShip01.respawn();
             }
         }
+        if (this.physics.collide(this.rockGroup, this.enemyShip02)) {
+            if(this.enemyShip02.y >= 0) {
+                this.enemyShip02.respawn();
+                this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
+            } else {
+                this.enemyShip02.respawn();
+            }
+        }
+
+        // enemy ships hitting eachother
+        if (this.physics.collide(this.enemyShip01, this.enemyShip02)) {
+            if(this.enemyShip01.y >= 0) {
+                this.enemyShip01.respawn();
+                this.enemyShip02.respawn();
+                this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
+            } else {
+                this.enemyShip01.respawn();
+                this.enemyShip02.respawn();
+            }
+        }
+
 
         // cannonball hitting rock, might not destroy the right canonBall
         if (this.physics.collide(this.pCannonBalls, this.rockGroup)) {
@@ -292,12 +307,19 @@ class Play extends Phaser.Scene {
         }
     
         // cannonball hitting enemy ship
-        if (this.physics.collide(this.pCannonBalls, this.enemyShip)) {
-            this.enemyShip.respawn();
+        if (this.physics.collide(this.pCannonBalls, this.enemyShip01)) {
+            this.enemyShip01.respawn();
             this.pCannonBalls.remove(this.pCannonBalls.getFirstAlive(), true, true);
-            this.bonusScore += 10 * scoreMultiplier;
+            this.bonusScore += 4 * scoreMultiplier;
             this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
         }
+        if (this.physics.collide(this.pCannonBalls, this.enemyShip02)) {
+            this.enemyShip02.respawn();
+            this.pCannonBalls.remove(this.pCannonBalls.getFirstAlive(), true, true);
+            this.bonusScore += 4 * scoreMultiplier;
+            this.sound.play('enemyShipDamage', {volume: 0.5 * volumeMultiplier});
+        }
+
 
         // cannonball hitting Treasure
         if (this.physics.collide(this.pCannonBalls, this.treasure)) {
@@ -310,12 +332,14 @@ class Play extends Phaser.Scene {
         if(this.physics.collide(this.rock01, this.rock02)) {
             this.rock01.respawn();
         }
+        /*
         if(this.physics.collide(this.rock01, this.rock03)) {
             this.rock01.respawn();
         }
         if(this.physics.collide(this.rock02, this.rock03)) {
             this.rock02.respawn();
         }
+        */
 
         // play a random wave sfx every 10 seconds
         if(!waveSfx && !this.gameOver) {
@@ -335,6 +359,19 @@ class Play extends Phaser.Scene {
             }, null, this);
         }
 
+    }
+
+    playerDamage() {
+        playerInvincible = true;
+        playerHealth -= 1;
+        this.cameras.main.shake(200, 0.01);
+        this.ship.setAlpha(0.7);
+        this.lifesRemaining.text = playerHealth;
+        this.sound.play('shipDamage', {volume: 0.5 * volumeMultiplier});
+        this.clock = this.time.delayedCall(2000, () => {
+            this.ship.setAlpha(1);
+            playerInvincible = false;
+        }, null, this);
     }
 
     checkForGameOver(){
