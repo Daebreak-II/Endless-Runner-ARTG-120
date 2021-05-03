@@ -5,7 +5,7 @@ let config = {
     scene: [ Menu, Play, GameOver ],
     physics: {
         default: 'arcade',
-        arcade: {debug: false} ,
+        arcade: {debug: true} ,
     }
 }
 
@@ -25,6 +25,8 @@ let scrollSpeed = 4;
 let spriteScale = 1;
 let shipVelocity = 0;
 let oldAngle = 0
+let CannonOnCooldown = false;
+let pCannonBalliter = 0;
 let scoreMultiplier = 1;
 let highScore = 0;
 let timeValue = 0;

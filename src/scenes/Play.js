@@ -12,6 +12,9 @@ class Play extends Phaser.Scene {
         this.load.image('treasure', './Assets/sprites/treasure.png');
         this.load.image('waterbackground', './Assets/sprites/waterbackground.png');
         this.load.image('steeringWheel', './Assets/sprites/wheel.png');
+        this.load.image('enemyShip', './Assets/sprites/enemyShip.png');
+        this.load.image('enemyCannonBall', './Assets/sprites/enemycannonball.png');
+        this.load.image('playerCannonBall', './Assets/sprites/playercannonball.png');
         this.load.audio('music', './Assets/sfx/Traveling Through the Endless Ocean.mp3');
         this.load.audio('shipDamage', './Assets/sfx/Ship_Breaking_Down.wav');
         this.load.audio('shipCreaking', './Assets/sfx/Ship_Creaking.wav');
@@ -40,6 +43,13 @@ class Play extends Phaser.Scene {
         // fixes tilemap tearing
         // this.cameras.roundPixels = true;
 
+        // define keys
+        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        
+        // adding in and initializing game objects
         // add ship (p1)
         this.ship = new PlayerShip(this, game.config.width/2, game.config.height - (borderUISize * 4) - borderPadding, 'playerShip', 0).setOrigin(0.5, 0.5);
         this.ship.setScale(0.15 * spriteScale);
@@ -47,6 +57,7 @@ class Play extends Phaser.Scene {
 
         // add rocks
         this.rockGroup = this.physics.add.group();
+        this.rockGroup.runChildUpdate = true;
 
         this.rock01 = new Rock(this, game.config.width * 1/4, 0 - game.config.height * 1/3, 'rock', 0).setOrigin(0.5, 0);
         this.rock02 = new Rock(this, game.config.width * 3/4, 0 - game.config.height * 1, 'rock', 0).setOrigin(0.5, 0);
@@ -55,6 +66,7 @@ class Play extends Phaser.Scene {
         this.rockGroup.add(this.rock01);
         this.rockGroup.add(this.rock02);
         this.rockGroup.add(this.rock03);
+
         this.rock01.setScale(0.5 * spriteScale);
         this.rock02.setScale(0.5 * spriteScale);
         this.rock03.setScale(0.5 * spriteScale);
@@ -67,24 +79,24 @@ class Play extends Phaser.Scene {
         this.treasure.setScale(0.3 * spriteScale);
         this.treasure.setSize(this.treasure.width * 3/4, this.treasure.height * 3/4);
 
+        // adding in enemy ship
+        this.enemyShip = new EnemyShip(this, game.config.width * 1/2, 0 - game.config.height * 2, 'enemyShip', 0).setOrigin(0.5, 0);
+
+
+
+        // adding groups for cannonBalls
+        this.pCannonBalls = this.physics.add.group();
+        this.pCannonBalls.runChildUpdate = true;
+
+
         // adding in steering wheel, as a sprite
         this.wheel = this.add.sprite(game.config.width / 2, game.config.height / 2 ,'steeringWheel');
         this.wheel.setScale(0.75);
         //this.playersUI = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'playerUI').setOrigin(0, 0);
 
-        // define keys
-        keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-        keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-
-
-        // play music
-        this.musicPlaying = this.sound.add("music", { volume: 0.5 * volumeMultiplier, loop: true });
-        this.musicPlaying.play();
-
         // logging initial mouse angle
         oldAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
+
         // font for the text (not final)
         let scoreConfig = {
             fontFamily: 'Courier',
@@ -98,8 +110,10 @@ class Play extends Phaser.Scene {
             },
             width: 100
         }
-        //making a game over check
-        this.gameOver = false;
+
+        // play music
+        this.musicPlaying = this.sound.add("music", { volume: 0.5 * volumeMultiplier, loop: true });
+        this.musicPlaying.play();
 
         //Making the score show up
         scoreCounter = 0;
@@ -107,6 +121,9 @@ class Play extends Phaser.Scene {
         this.finalScore = 0;
         this.scoreText = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'Booty Plundered ' + scoreCounter, scoreConfig);
         this.lifesRemaining = this.add.text(borderUISize + borderPadding + 510, borderUISize + borderPadding*2, 'Health Left: ' + playerHealth, scoreConfig);
+
+        //making a game over check
+        this.gameOver = false;
     }
 
     update(time, delta) {
@@ -123,6 +140,7 @@ class Play extends Phaser.Scene {
             playerInvincible = false;
             shipVelocity = 0;
             scoreMultiplier = 1;
+            CannonOnCooldown = false;
         }
 
         if(!this.gameOver){
@@ -144,6 +162,7 @@ class Play extends Phaser.Scene {
             let newAngle = Phaser.Math.Angle.Between(this.wheel.x, this.wheel.y, this.input.x, this.input.y);
         
 
+            // turning controls
             if (game.input.activePointer.leftButtonDown()) {
                 this.wheel.setRotation(newAngle + Math.PI / 2);
                 // change velocity based off change in mouse angle, special case for going from 180 to -180 and vice versa
@@ -152,6 +171,18 @@ class Play extends Phaser.Scene {
                 } else {
                     shipVelocity -= (oldAngle - newAngle) * 20;
                 }
+            }
+
+            // firing canon Ball
+            if (Phaser.Input.Keyboard.JustDown(keyF) && CannonOnCooldown == false) {
+                CannonOnCooldown = true;
+                this.pCannonBall = new PlayerCannonBall(this, this.ship.x, this.ship.y, 'playerCannonBall', 0).setOrigin(0.5, 0.5);
+                this.pCannonBall.setScale(0.1 * spriteScale);
+                // this.pCannonBall.setSize(this.pCannonBall.width * spriteScale, this.pCannonBall.height * spriteScale);
+                this.pCannonBalls.add(this.pCannonBall);
+                this.clock = this.time.delayedCall(1500, () => {
+                    CannonOnCooldown = false;
+                }, null, this);
             }
 
 
@@ -163,17 +194,15 @@ class Play extends Phaser.Scene {
             }
             oldAngle = newAngle;
         
+            // Updating objects, groups automatically updated
             this.treasure.update();
-            this.rock01.update();
-            this.rock02.update();
-            this.rock03.update();
             this.ship.update();
 
             // speed up game based on time
             scrollSpeed = 4 + (this.finalScore / 30000);
         }
 
-        // check collisions
+        // Checking Collisions
         // hitting rock
         if(this.physics.collide(this.ship, this.rockGroup)) {
             if(!playerInvincible) {
@@ -197,9 +226,6 @@ class Play extends Phaser.Scene {
             this.bonusScore += 10 * scoreMultiplier;
             scoreMultiplier += 0.5;
             this.sound.play('treasurePickup', {volume: 1 * volumeMultiplier});
-            this.clock = this.time.delayedCall(10000, () => {
-
-            }, null, this);
         }
 
         // respawn rocks so they don't overlap
@@ -232,6 +258,7 @@ class Play extends Phaser.Scene {
         }
 
     }
+
     checkForGameOver(){
 
         if(playerHealth <= 0){
