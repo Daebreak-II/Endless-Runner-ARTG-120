@@ -16,6 +16,7 @@ class Play extends Phaser.Scene {
         this.load.image('enemyCannonBall', './Assets/sprites/enemycannonball.png');
         this.load.image('playerCannonBall', './Assets/sprites/playercannonball.png');
         this.load.image('playUI', './Assets/sprites/gameUI.png');
+        // load audio
         this.load.audio('music', './Assets/sfx/Traveling Through the Endless Ocean.mp3');
         this.load.audio('shipDamage', './Assets/sfx/Ship_Breaking_Down.wav');
         this.load.audio('shipCreaking', './Assets/sfx/Ship_Creaking.wav');
@@ -29,11 +30,12 @@ class Play extends Phaser.Scene {
         this.load.audio('rockBreaking', './Assets/sfx/RockBreaking.wav');
         this.load.audio('enemyShipDamage', './Assets/sfx/EnemyShipBreaking.wav');
         this.load.audio('treasureDamage', './Assets/sfx/Cannonball_Pick_Up.mp3');
-        
+        // load animations
+        this.load.spritesheet('treasurePickupAnim', './Assets/animations/treasureanimation.png', {frameWidth: 111, frameHeight: 200, startFrame: 0, endFrame: 9});
     }
 
     create() {
-        //const child = this.children.getAt(0);
+
         // place tile sprite
         this.ocean = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'waterbackground').setOrigin(0, 0);
         
@@ -46,8 +48,13 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x000000).setOrigin(0, 0);
         */
 
-        // fixes tilemap tearing
-        // this.cameras.roundPixels = true;
+        // create animations
+        this.anims.create({
+            key: 'treasurePickupAnim',
+            frames: this.anims.generateFrameNumbers('treasurePickupAnim', {start: 0, end: 9, first: 0}),
+            frameRate: 8
+        });
+
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -254,6 +261,7 @@ class Play extends Phaser.Scene {
 
         // pickup treasure
         if(this.physics.collide(this.ship, this.treasure)) {
+            this.treasurePickup();
             this.treasure.y = 0 - this.treasure.height - game.config.height;
             this.treasure.x = Phaser.Math.Between(borderUISize + borderPadding + this.treasure.width, game.config.width - borderUISize - borderPadding - this.treasure.width);
             this.bonusScore += 10 * scoreMultiplier;
@@ -378,8 +386,15 @@ class Play extends Phaser.Scene {
         }, null, this);
     }
 
-    checkForGameOver(){
+    treasurePickup() {
+        let sparkle = this.add.sprite(this.treasure.x, this.treasure.y, 'treasurePickupAnim').setOrigin(0.5, 0);
+        sparkle.anims.play('treasurePickupAnim');
+        sparkle.on('animationcomplete', () => {
+            sparkle.destroy();
+        });
+    }
 
+    checkForGameOver(){
         if(playerHealth <= 0){
             this.ship.destroy();
             if(scoreCounter > highScore) {
