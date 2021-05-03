@@ -31,6 +31,10 @@ open waters, which helps the players stay immersed. We also made objects that th
 interacts with blend with the water by curving the bottom of the item, whether it be
 a treasure chest or a rock, to simulate waves hitting the item.
 
+The music also had to follow a good amount of the pirate feel so it was made from scrach
+with the idea of repition to almost have a sea shanti feel to it. The sound effects also 
+follow this theming by using pirate sound clips and sounds of wind and breaking wood.
+
 */
 
 let config = {
