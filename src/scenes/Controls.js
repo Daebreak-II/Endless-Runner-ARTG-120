@@ -45,7 +45,7 @@ class Controls extends Phaser.Scene {
 
         let controlsConfig = {
             fontFamily: 'Monotype Corsiva',
-            fontSize: '36px',
+            fontSize: '34px',
             color: '#000',
             stroke: '#000',
             strokeThickness: 1,
