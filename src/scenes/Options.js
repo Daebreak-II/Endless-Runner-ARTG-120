@@ -23,7 +23,7 @@ class Options extends Phaser.Scene {
         //Setting text for the options
         let optionsConfig = {
             fontFamily: 'Monotype Corsiva',
-            fontSize: '36px',
+            fontSize: '42px',
             color: '#000',
             stroke: '#000',
             strokeThickness: 2,
@@ -34,32 +34,46 @@ class Options extends Phaser.Scene {
             },
             width: 100
         }
-        this.soundVolume = this.add.text(50, 100, 'Volume: ');
+        let titleConfig = {
+          fontFamily: 'Monotype Corsiva',
+          fontSize: '80px',
+          color: '#000',
+          stroke: '#000',
+          strokeThickness: 1,
+          align: 'center',
+          padding: {
+              top: 5,
+              bottom: 5,
+          },
+          width: 100
+      }
+        this.titleOptions = this.add.text(game.config.width / 2 - 120, 0, 'Options', titleConfig);
+        this.soundVolume = this.add.text(50, 200, 'Volume: ', optionsConfig);
 
         //setting up options in menu
-        this.selectPlay = this.add.sprite(250, game.config.height/2 - 4, 'play').setOrigin(0, 0);
-        this.selectPlay.setScale(0.5);
+        this.selectLeftVolume = this.add.sprite(250, game.config.height/2 - 4, 'leftarrow').setOrigin(0, 0);
+        this.selectLeftVolume.setScale(0.5);
 
-        this.mousePlay = this.selectPlay.setInteractive();
+        this.mouseLeftVolume = this.selectLeftVolume.setInteractive();
 
 
-        this.selectOptions = this.add.image(250, game.config.height/2 + 305, 'quit').setOrigin(0, 0);
+        this.selectRightVolume = this.add.image(250, game.config.height/2 + 305, 'quit').setOrigin(0, 0);
         this.selectOptions.setScale(0.5);
 
         this.mouseOptions = this.selectOptions.setInteractive();
         
-        this.mousePointerisOverPlay = false;
+        this.mousePointerisOverLeftVolume = false;
 
         this.mousePointerisOverOptions = false;
   
         //setting up mouse cursor over object
-        this.mousePlay.on('pointerover', () => { 
-          this.mousePointerisOverPlay = true;
+        this.mouseLeftVolume.on('pointerover', () => { 
+          this.mousePointerisOverLeftVolume = true;
           this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
         
-        this.mousePlay.on('pointerout', () => { 
-          this.mousePointerisOverPlay = false; 
+        this.mouseLeftVolume.on('pointerout', () => { 
+          this.mousePointerisOverLeftVolume = false; 
         });
 
         this.mouseOptions.on('pointerover', () => { 
@@ -75,11 +89,13 @@ class Options extends Phaser.Scene {
     }
     update(){
       
-      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverPlay){
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverLeftVolume){
         //console.log('Is mouse working?');
-        this.scene.start("playScene");
-        //this.scene.start("gameOverScene");
-        this.sound.play('selected', {volume: 1 * volumeMultiplier});
+        if(volumeMultiplier > 0){
+          volumeMultiplier -= 0.25;
+          console.log(volumeMultiplier);
+          this.sound.play('selected', {volume: 1 * volumeMultiplier});
+        }
       }
 
       if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverOptions){

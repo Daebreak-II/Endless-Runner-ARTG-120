@@ -8,6 +8,7 @@ class GameOver extends Phaser.Scene {
       this.load.image('playAgain', './Assets/sprites/playagainbutton.png');
       this.load.image('gameOverquit', './Assets/sprites/gameoverquitbutton.png');
       this.load.image('backToMenu', './Assets/sprites/mainmenubutton.png');
+      this.load.image('quitGameOver', './Assets/sprites/gameoverquitbutton.png');
       this.load.audio('selected', './Assets/sfx/Selection.mp3');
       this.load.audio('menuChoice', './Assets/sfx/Moving_to_a_different_selection.wav');
     }
@@ -25,11 +26,18 @@ class GameOver extends Phaser.Scene {
         this.selectMenu = this.add.sprite(532, game.config.height/2 + 265, 'backToMenu').setOrigin(0, 0);
         this.selectMenu.setScale(0.5);
 
+        this.selectQuit = this.add.sprite(280, game.config.height/2 + 315, 'quitGameOver').setOrigin(0, 0);
+        this.selectQuit.setScale(0.5);
+
         this.mouseMenu = this.selectMenu.setInteractive();
+
+        this.mouseQuit = this.selectQuit.setInteractive();
         
         this.mousePointerisOverPlayAgain = false;
 
         this.mousePointerisOverMenu = false;
+
+        this.mousePointerisOverQuit = false;
   
         //setting up mouse cursor over object
         this.mousePlayAgain.on('pointerover', () => { 
@@ -49,6 +57,15 @@ class GameOver extends Phaser.Scene {
           this.mousePointerisOverMenu = false;
           
           //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
+        });
+
+        this.mouseQuit.on('pointerover', () => { 
+          this.mousePointerisOverQuit = true;
+          this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
+        });
+        
+        this.mouseQuit.on('pointerout', () => { 
+          this.mousePointerisOverQuit = false; 
         });
 
         // putting the scores and times in th game over screen
@@ -92,6 +109,12 @@ class GameOver extends Phaser.Scene {
         this.scene.start("menuScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
         //this.sys.game.destroy(true);
+      }
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverQuit){
+        //console.log('Is mouse working?');
+        //this.scene.start("playScene");
+        this.sound.play('selected', {volume: 1 * volumeMultiplier});
+        this.sys.game.destroy(true);
       }                 
     }
   }

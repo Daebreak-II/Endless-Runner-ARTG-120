@@ -7,6 +7,7 @@ class Menu extends Phaser.Scene {
       this.load.image('menu', './Assets/sprites/mainmenu.png');
       this.load.image('play', './Assets/sprites/playButton.png');
       this.load.image('quit', './Assets/sprites/quitButton.png');
+      this.load.image('options', './Assets/sprites/options.png');
       this.load.audio('selected', './Assets/sfx/Selection.mp3');
       this.load.audio('menuChoice', './Assets/sfx/Moving_to_a_different_selection.wav');
     }
@@ -28,11 +29,18 @@ class Menu extends Phaser.Scene {
         this.selectQuit = this.add.image(250, game.config.height/2 + 305, 'quit').setOrigin(0, 0);
         this.selectQuit.setScale(0.5);
 
+        this.selectOptions = this.add.image(250, game.config.height/2 + 150, 'options').setOrigin(0, 0);
+        this.selectOptions.setScale(0.5);
+
         this.mouseQuit = this.selectQuit.setInteractive();
+
+        this.mouseOptions = this.selectOptions.setInteractive();
         
         this.mousePointerisOverPlay = false;
 
         this.mousePointerisOverQuit = false;
+
+        this.mousePointerisOverOptions = false;
   
         //setting up mouse cursor over object
         this.mousePlay.on('pointerover', () => { 
@@ -53,6 +61,14 @@ class Menu extends Phaser.Scene {
           
           //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
+        this.mouseOptions.on('pointerover', () => { 
+          this.mousePointerisOverOptions = true;
+          this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
+        });
+        
+        this.mouseOptions.on('pointerout', () => { 
+          this.mousePointerisOverOptions = false; 
+        });
         
     }
     update(){
@@ -69,6 +85,13 @@ class Menu extends Phaser.Scene {
         //this.scene.start("playScene");
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
         this.sys.game.destroy(true);
+      }
+
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverOptions){
+        //console.log('Is mouse working?');
+        this.scene.start("optionScene");
+        //this.scene.start("gameOverScene");
+        this.sound.play('selected', {volume: 1 * volumeMultiplier});
       }
 
 
