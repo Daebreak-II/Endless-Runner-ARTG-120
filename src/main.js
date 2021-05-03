@@ -36,6 +36,11 @@ let playerHealth = 3;
 let playerInvincible = false;
 let scoreCounter = 0;
 
+//Control Variables
+
+let mouseControlOn = true;
+let arrowControlsOn = false;
+
 // volume variables
 let volumeMultiplier = 0.25;
 let waveSfx = false;

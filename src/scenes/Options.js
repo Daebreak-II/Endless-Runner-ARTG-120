@@ -51,20 +51,20 @@ class Options extends Phaser.Scene {
         this.soundVolume = this.add.text(50, 200, 'Volume: ', optionsConfig);
 
         //setting up options in menu
-        this.selectLeftVolume = this.add.sprite(250, game.config.height/2 - 4, 'leftarrow').setOrigin(0, 0);
+        this.selectLeftVolume = this.add.sprite(225, game.config.height/2 - 300, 'leftarrow').setOrigin(0, 0);
         this.selectLeftVolume.setScale(0.5);
 
         this.mouseLeftVolume = this.selectLeftVolume.setInteractive();
 
 
-        this.selectRightVolume = this.add.image(250, game.config.height/2 + 305, 'right').setOrigin(0, 0);
+        this.selectRightVolume = this.add.image(500, game.config.height/2 - 300, 'right').setOrigin(0, 0);
         this.selectRightVolume.setScale(0.5);
 
-        this.mouseOptions = this.selectOptions.setInteractive();
+        this.mouseRightVolume = this.selectRightVolume.setInteractive();
         
         this.mousePointerisOverLeftVolume = false;
 
-        this.mousePointerisOverOptions = false;
+        this.mousePointerisOverRightVolume = false;
   
         //setting up mouse cursor over object
         this.mouseLeftVolume.on('pointerover', () => { 
@@ -76,15 +76,17 @@ class Options extends Phaser.Scene {
           this.mousePointerisOverLeftVolume = false; 
         });
 
-        this.mouseOptions.on('pointerover', () => { 
-          this.mousePointerisOverOptions = true;
+        this.mouseRightVolume.on('pointerover', () => { 
+          this.mousePointerisOverRightVolume = true;
           this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
-        this.mouseOptions.on('pointerout', () => { 
-          this.mousePointerisOverOptions = false;
+        this.mouseRightVolume.on('pointerout', () => { 
+          this.mousePointerisOverRightVolume = false;
           
           //this.sound.play('menuChoice', {volume: 1 * volumeMultiplier}); 
         });
+
+        this.volumeLevel = this.add.text(365, game.config.height/2 - 300, volumeMultiplier, optionsConfig);
         
     }
     update(){
@@ -93,16 +95,15 @@ class Options extends Phaser.Scene {
         //console.log('Is mouse working?');
         if(volumeMultiplier > 0){
           volumeMultiplier -= 0.25;
-          console.log(volumeMultiplier);
+          this.volumeLevel.text = volumeMultiplier;
           this.sound.play('selected', {volume: 1 * volumeMultiplier});
         }
       }
 
-      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverOptions){
-        //console.log('Is mouse working?');
-        //this.scene.start("playScene");
+      if(game.input.activePointer.leftButtonDown() && this.mousePointerisOverRightVolume){
+        volumeMultiplier += 0.25;
+        this.volumeLevel.text = volumeMultiplier;
         this.sound.play('selected', {volume: 1 * volumeMultiplier});
-        this.sys.game.destroy(true);
       }
 
 
