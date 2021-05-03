@@ -19,7 +19,17 @@ alternative), the player must click and drag around the wheel to turn the
 wheel right and left in order to turn. Turning the wheel faster or slower
 also affects how fast the ship turns.
 
-
+The visual design of this game revolved around pirates and the open sea.
+This means the art had to revolve around wood and water, so the color
+scheme had to mostly be brown and blue. For the menus, we used wooden signs 
+for each of the buttons, and these signs were on a beach with an ocean in the background
+so the two colors would fit together without seeming out of place. 
+The menus are also a creative way to start and end the game since the beach
+marks the entrance and exit to the ocean, where the game takes place. As for the game, we used
+a blue UI so that when the player is out to sea, the UI meshes with the
+open waters, which helps the players stay immersed. We also made objects that the player
+interacts with blend with the water by curving the bottom of the item, whether it be
+a treasure chest or a rock, to simulate waves hitting the item.
 
 */
 
